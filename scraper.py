@@ -2,21 +2,11 @@
 HKD to INR remittance rate scraper.
 
 Writes rates.json with:
-  - mid_market_rate: live, from frankfurter.app (ECB-backed, free, keyless)
+  - mid_market_rate: live, from fawazahmed0/currency-api via jsDelivr CDN
+    (free, keyless, CORS-enabled, updated daily)
   - providers[].fee_flat_hkd / fx_margin_pct: live for providers with
     public APIs; omitted for the rest so the frontend falls back to curated
     values in index.html.
-
-Design principles:
-
-  1. Only claims a quote is "live" when it genuinely came from an API in
-     this run.
-  2. Tags every provider entry with source = "api" | "curated" | "unavailable"
-     so the frontend can show the difference to the user.
-  3. Never scrapes HTML. Fintech comparison pages change their DOM constantly,
-     use client-side rendering, and often have ToS that prohibit scraping for
-     competitive comparison. We only use endpoints the provider themselves
-     publishes publicly.
 """
 
 from __future__ import annotations
@@ -33,6 +23,14 @@ AMOUNT_HKD = 10_000
 TIMEOUT = 15
 OUT_PATH = Path("rates.json")
 
+FX_PRIMARY = (
+    "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/"
+    "v1/currencies/hkd.json"
+)
+FX_FALLBACK = (
+    "https://latest.currency-api.pages.dev/v1/currencies/hkd.json"
+)
+
 
 def iso_now() -> str:
     return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -42,23 +40,30 @@ def iso_now() -> str:
 # Mid-market rate
 # ---------------------------------------------------------------------------
 
+def _fetch_from(url: str) -> float | None:
+    r = requests.get(url, timeout=TIMEOUT)
+    r.raise_for_status()
+    data = r.json()
+    inr = data.get("hkd", {}).get("inr")
+    if inr is None:
+        return None
+    return float(inr)
+
+
 def fetch_mid_market() -> float | None:
     """
-    Fetch the HKD to INR mid-market rate from frankfurter.app.
-    Free, keyless, ECB-backed. Returns None on failure.
+    Fetch the HKD to INR mid-market rate from fawazahmed0/currency-api,
+    served through jsDelivr. Falls back to the Cloudflare Pages mirror
+    if jsDelivr is unavailable. Returns None if both fail.
     """
-    try:
-        r = requests.get(
-            "https://api.frankfurter.app/latest",
-            params={"from": "HKD", "to": "INR"},
-            timeout=TIMEOUT,
-        )
-        r.raise_for_status()
-        data = r.json()
-        return float(data["rates"]["INR"])
-    except Exception as e:
-        print(f"[mid-market] failed: {e}", file=sys.stderr)
-        return None
+    for url in (FX_PRIMARY, FX_FALLBACK):
+        try:
+            rate = _fetch_from(url)
+            if rate:
+                return rate
+        except Exception as e:
+            print(f"[mid-market] {url} failed: {e}", file=sys.stderr)
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -66,11 +71,6 @@ def fetch_mid_market() -> float | None:
 # ---------------------------------------------------------------------------
 
 def fetch_wise_quote(mid: float) -> dict[str, Any] | None:
-    """
-    Wise publishes a comparison endpoint used by their own compare widget.
-    We only trust the Wise row from the response - the other providers'
-    numbers in it are Wise's estimates, not those providers' live data.
-    """
     try:
         r = requests.get(
             "https://api.wise.com/v4/comparisons/",
