@@ -53,11 +53,11 @@ def fetch_mid_market() -> float | None:
     Returns None on failure — caller handles that.
     """
     try:
-        r = requests.get(
-            "https://api.exchangerate.host/latest",
-            params={"base": "HKD", "symbols": "INR"},
-            timeout=TIMEOUT,
-        )
+           r = requests.get(
+       "https://api.frankfurter.app/latest",
+       params={"from": "HKD", "to": "INR"},
+       timeout=TIMEOUT,
+   )
         r.raise_for_status()
         data = r.json()
         return float(data["rates"]["INR"])
