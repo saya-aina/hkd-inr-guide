@@ -1,0 +1,56 @@
+name: Update rates.json
+
+# Runs scraper.py hourly, commits the result if it changed.
+#
+# Notes before you ship this:
+#   1. GitHub Actions cron is best-effort — "0 * * * *" often fires 15–60 min late
+#      during peak hours. Don't promise users minute-accurate updates.
+#   2. Workflows on repos with no human activity for 60 days get paused.
+#      Push a nudge commit, or use workflow_dispatch to kick it awake.
+#   3. The default GITHUB_TOKEN only has write access when `permissions: contents: write`
+#      is set explicitly below. Without this the push step 403s silently.
+#   4. The commit filter (`if git diff --quiet`) stops this from bloating history
+#      with no-op commits when the mid-market rate hasn't moved.
+
+on:
+  schedule:
+    - cron: "0 * * * *"      # top of every hour, UTC
+  workflow_dispatch:          # manual trigger from the Actions tab
+
+permissions:
+  contents: write             # required for the auto-commit step
+
+concurrency:
+  group: update-rates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet requests
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "rates-bot"
+          git config user.email "rates-bot@users.noreply.github.com"
+          git add rates.json
+          if git diff --cached --quiet; then
+            echo "No change in rates.json — nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore: update rates.json ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push
