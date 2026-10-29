@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-29T16:37:19Z",
+  "mid_market_rate": 12.1413,
+  "reference_amount_hkd": 10000,
+  "providers": [
+    {
+      "id": "wise",
+      "fee_flat_hkd": 60.58,
+      "fx_margin_pct": 0.12,
+      "reference_amount_hkd": 10000,
+      "source": "api",
+      "fetched_at": "2026-10-29T16:37:19Z"
+    },
+    {
+      "id": "instarem",
+      "source": "curated"
+    },
+    {
+      "id": "panda",
+      "source": "curated"
+    },
+    {
+      "id": "remitly",
+      "source": "curated"
+    },
+    {
+      "id": "orbitremit",
+      "source": "curated"
+    },
+    {
+      "id": "xe",
+      "source": "curated"
+    },
+    {
+      "id": "wu",
+      "source": "curated"
+    },
+    {
+      "id": "mg",
+      "source": "curated"
+    },
+    {
+      "id": "hsbc",
+      "source": "curated"
+    },
+    {
+      "id": "dbs",
+      "source": "curated"
+    },
+    {
+      "id": "bochk",
+      "source": "curated"
+    }
+  ],
+  "note": "Live per-provider fees are populated only where a public API exists. 'curated' entries read their fee/margin from the PROVIDERS table in index.html; 'unavailable' entries attempted a live fetch and failed."
+}
