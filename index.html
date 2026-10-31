@@ -3,898 +3,182 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HKD → INR · Honest Remittance Comparison for Hong Kong NRIs</title>
-<meta name="description" content="Compliance-aware comparison of HKD-to-INR remittance providers. Live mid-market rate, iAM Smart onboarding filters, NRE/NRO routing, FIRC availability, and high-value transfer handling.">
-<style>
-  :root {
-    --bg: #faf8f4;
-    --surface: #ffffff;
-    --surface-2: #f3efe7;
-    --ink: #1a1a1a;
-    --ink-soft: #4a4a4a;
-    --ink-faint: #8a8a8a;
-    --line: #e8e4dc;
-    --line-strong: #d4cfc3;
-    --accent: #c2410c;
-    --accent-soft: #fef3ec;
-    --good: #15803d;
-    --good-soft: #ecfdf5;
-    --warn: #a16207;
-    --warn-soft: #fefce8;
-    --bad: #b91c1c;
-    --bad-soft: #fef2f2;
-    --radius: 10px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #141210;
-      --surface: #1d1b18;
-      --surface-2: #26231f;
-      --ink: #f5f1ea;
-      --ink-soft: #c8c2b8;
-      --ink-faint: #807a70;
-      --line: #2d2a26;
-      --line-strong: #403b35;
-      --accent: #fb923c;
-      --accent-soft: #2a1e14;
-      --good: #4ade80;
-      --good-soft: #0f1f16;
-      --warn: #facc15;
-      --warn-soft: #1f1a0d;
-      --bad: #f87171;
-      --bad-soft: #1f1212;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #141210; --surface: #1d1b18; --surface-2: #26231f;
-    --ink: #f5f1ea; --ink-soft: #c8c2b8; --ink-faint: #807a70;
-    --line: #2d2a26; --line-strong: #403b35;
-    --accent: #fb923c; --accent-soft: #2a1e14;
-    --good: #4ade80; --good-soft: #0f1f16;
-    --warn: #facc15; --warn-soft: #1f1a0d;
-    --bad: #f87171; --bad-soft: #1f1212;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    background: var(--bg); color: var(--ink);
-    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
-  }
-  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 16px 80px; }
-
-  /* Header */
-  header.site { margin-bottom: 28px; }
-  .eyebrow {
-    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--accent); font-weight: 600; margin-bottom: 8px;
-  }
-  h1 {
-    font: 600 clamp(28px, 4.4vw, 40px)/1.12 ui-serif, Georgia, "Times New Roman", serif;
-    margin: 0 0 10px; letter-spacing: -0.015em;
-  }
-  .lede { color: var(--ink-soft); margin: 0 0 6px; max-width: 62ch; }
-  .sub { color: var(--ink-faint); font-size: 13px; margin: 0; }
-
-  section { margin-top: 36px; }
-  h2 {
-    font: 600 22px/1.3 ui-serif, Georgia, serif;
-    margin: 0 0 14px; letter-spacing: -0.005em;
-  }
-  h3 { font-size: 15px; margin: 0 0 8px; font-weight: 600; }
-  h4 { font-size: 14px; margin: 16px 0 6px; font-weight: 600; color: var(--ink); }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 18px;
-  }
-
-  /* Live rate widget */
-  .rate-widget {
-    display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;
-  }
-  .rate-widget .label { color: var(--ink-faint); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
-  .rate-widget .big {
-    font: 500 clamp(28px, 5vw, 40px)/1 ui-serif, Georgia, serif;
-    letter-spacing: -0.01em; margin: 4px 0 2px;
-  }
-  .rate-widget .meta { color: var(--ink-faint); font-size: 12px; }
-  .btn-secondary {
-    background: transparent; border: 1px solid var(--line-strong); color: var(--ink-soft);
-    padding: 7px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;
-    font-family: inherit;
-  }
-  .btn-secondary:hover { color: var(--ink); border-color: var(--ink-soft); }
-
-  /* Calculator + filters */
-  .calc { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .calc label, .filters label { display: block; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; font-weight: 600; }
-  .calc input, .filters select {
-    width: 100%; padding: 10px 12px; font-size: 16px;
-    background: var(--bg); color: var(--ink);
-    border: 1px solid var(--line); border-radius: 8px; font-family: inherit;
-  }
-  .calc input:focus, .filters select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
-  .calc .out {
-    padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px;
-    color: var(--ink-soft); font-variant-numeric: tabular-nums;
-  }
-
-  .filters {
-    margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line);
-    display: grid; gap: 14px;
-  }
-  .toggles {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;
-  }
-  .toggle {
-    display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
-    background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
-    cursor: pointer; user-select: none; transition: border-color .15s ease;
-  }
-  .toggle:hover { border-color: var(--line-strong); }
-  .toggle input { margin-top: 3px; accent-color: var(--accent); }
-  .toggle-text { font-size: 13px; line-height: 1.4; }
-  .toggle-text .t-title { font-weight: 600; color: var(--ink); }
-  .toggle-text .t-sub { color: var(--ink-faint); font-size: 12px; display: block; margin-top: 2px; }
-
-  .sort-row { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
-  .sort-row > div { flex: 1 1 180px; }
-
-  /* Providers */
-  #provider-meta { color: var(--ink-faint); font-size: 13px; margin: 0 0 14px; }
-  .providers { display: grid; gap: 14px; }
-  .provider {
-    display: grid; grid-template-columns: 1fr auto; gap: 14px 20px;
-    align-items: start; padding: 20px;
-  }
-  .provider .head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .provider .name { font-weight: 600; font-size: 17px; color: var(--ink); }
-  .provider .host { color: var(--ink-faint); font-size: 12px; }
-  .provider p.desc { margin: 8px 0 10px; color: var(--ink-soft); font-size: 14px; }
-
-  .badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 10px; }
-  .badge {
-    font-size: 11px; letter-spacing: 0.04em;
-    padding: 3px 8px; border-radius: 999px; font-weight: 500;
-    border: 1px solid transparent;
-  }
-  .badge.good { background: var(--good-soft); color: var(--good); border-color: color-mix(in srgb, var(--good) 30%, transparent); }
-  .badge.warn { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
-  .badge.bad  { background: var(--bad-soft);  color: var(--bad);  border-color: color-mix(in srgb, var(--bad) 30%, transparent); }
-  .badge.neutral { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line-strong); }
-
-  .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px 18px; margin-top: 10px; }
-  .spec { font-size: 12px; }
-  .spec .k { color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; margin-bottom: 2px; }
-  .spec .v { color: var(--ink); font-weight: 500; }
-
-  .verified { color: var(--ink-faint); font-size: 11px; margin-top: 12px; display: block; }
-
-  .cta-col { display: flex; flex-direction: column; gap: 8px; align-items: stretch; min-width: 150px; }
-  .cta {
-    display: inline-block; padding: 9px 14px; border-radius: 8px;
-    background: var(--ink); color: var(--bg); text-decoration: none; font-size: 14px; font-weight: 500;
-    white-space: nowrap; text-align: center;
-  }
-  .cta:hover { background: var(--accent); color: #fff; }
-  .cta.ghost { background: transparent; color: var(--ink-faint); border: 1px solid var(--line-strong); cursor: default; }
-  .live-rate {
-    font-size: 12px; color: var(--ink-faint); text-align: center;
-    padding: 6px 10px; border: 1px dashed var(--line-strong); border-radius: 6px;
-  }
-  .live-rate .v { color: var(--ink); font-weight: 600; }
-
-  @media (max-width: 620px) {
-    .provider { grid-template-columns: 1fr; }
-    .cta-col { flex-direction: row; }
-    .calc { grid-template-columns: 1fr; }
-    .rate-widget { grid-template-columns: 1fr; }
-    .rate-widget .btn-secondary { justify-self: start; }
-  }
-
-  /* Guide tabs */
-  .tabs nav {
-    display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px;
-    border-bottom: 1px solid var(--line); margin-bottom: 18px;
-    scrollbar-width: thin;
-  }
-  .tabs nav button {
-    background: transparent; border: 0; padding: 10px 14px;
-    font: inherit; font-size: 13px; color: var(--ink-faint);
-    cursor: pointer; border-bottom: 2px solid transparent;
-    white-space: nowrap; margin-bottom: -1px;
-  }
-  .tabs nav button:hover { color: var(--ink); }
-  .tabs nav button[aria-selected="true"] {
-    color: var(--ink); border-bottom-color: var(--accent); font-weight: 600;
-  }
-  .tabpanel { display: none; }
-  .tabpanel[data-active] { display: block; }
-  .tabpanel p { color: var(--ink-soft); margin: 0 0 12px; }
-  .tabpanel ul { color: var(--ink-soft); margin: 0 0 12px; padding-left: 22px; }
-  .tabpanel li { margin-bottom: 6px; }
-  .tabpanel strong { color: var(--ink); }
-  .callout {
-    margin: 14px 0; padding: 12px 14px; border-left: 3px solid var(--accent);
-    background: var(--accent-soft); border-radius: 0 6px 6px 0; font-size: 13px; color: var(--ink);
-  }
-  .mini-table {
-    width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 13px;
-  }
-  .mini-table th, .mini-table td {
-    text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line);
-    vertical-align: top;
-  }
-  .mini-table th { color: var(--ink-faint); font-weight: 600; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
-  .mini-table td { color: var(--ink-soft); }
-
-  /* Disclaimer + footer */
-  .disclaimer {
-    margin-top: 36px; padding: 14px 16px;
-    border-left: 3px solid var(--warn); background: var(--surface);
-    border-radius: 6px; color: var(--ink-soft); font-size: 13px; line-height: 1.55;
-  }
-  footer {
-    margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
-    color: var(--ink-faint); font-size: 12px;
-  }
-  footer a { color: var(--ink-soft); }
-  a { color: var(--accent); }
-
-  .empty {
-    padding: 32px; text-align: center; color: var(--ink-faint);
-    border: 1px dashed var(--line-strong); border-radius: var(--radius); font-size: 14px;
-  }
-</style>
+<title>nriremit — The honest guide for Indians in Hong Kong</title>
+<meta name="description" content="Live HKD→INR rates, real compliance guidance, news from home, and a weekly cartoon. Built for the Indian diaspora in Hong Kong.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+
+<div class="nav-wrap">
+  <nav class="main">
+    <a class="logo-link" href="index.html"><img class="logo-img" src="assets/logo.png" alt="nriremit"></a>
+    <div class="nav-items">
+      <a href="index.html" class="active">Home</a>
+      <a href="remittance.html">Remittance</a>
+      <a href="guides.html">Guides</a>
+      <a href="myths.html">Myths &amp; Facts</a>
+      <a href="india-beat.html">India Beat</a>
+      <a href="leftover-citizen.html">The Leftover Citizen</a>
+    </div>
+    <a href="remittance.html" class="cta-pill">Compare Rates</a>
+  </nav>
+</div>
+
 <div class="wrap">
 
-<header class="site">
-  <div class="eyebrow">Hong Kong → India · HKD → INR</div>
-  <h1>The honest remittance comparison for Hong Kong NRIs.</h1>
-  <p class="lede">Live mid-market rate, compliance-aware filters, and the operational detail — iAM Smart onboarding, NRE routing, FIRC availability, weekend cutoffs — that generic comparison sites skip.</p>
-  <p class="sub">Independent informational directory. Not a licensed financial service. Always confirm fees and eligibility on the provider's own site before transferring.</p>
-</header>
+<section class="hero">
+  <div>
+    <div class="hero-badge"><span class="dot"></span> Live quotes from <span id="providerCount">14+</span> providers · Hong Kong → India</div>
 
-<!-- Live mid-market rate -->
-<section>
-  <h2>Today's mid-market rate</h2>
-  <div class="card rate-widget">
-    <div>
-      <div class="label">1 HKD equals</div>
-      <div class="big" id="rate">—</div>
-      <div class="meta" id="rateMeta">Fetching…</div>
+    <h1 class="hero-head">The honest guide for Indians in <span class="accent">Hong Kong</span>.</h1>
+    <p class="hero-sub">Live money-transfer rates, the compliance stuff that trips people up, news from home, and a weekly cartoon that notices what the headlines don't. Four things, one site.</p>
+    <div class="hero-ctas">
+      <a href="remittance.html" class="cta-pill">Compare HKD → INR rates →</a>
+      <a href="leftover-citizen.html" class="cta-pill ghost">Read this week's strip ↓</a>
     </div>
-    <button class="btn-secondary" id="refreshBtn" type="button">Refresh</button>
+  </div>
+  <div class="widget">
+    <div class="widget-head"><span class="widget-title">Transfer Money</span><span class="live-badge">Live Rates</span></div>
+    <div class="widget-swap">
+      <div class="widget-field"><div style="flex:1"><label>You send</label><div class="amount-display" id="widgetSendDisplay">10,000</div></div><span class="currency-chip"><span class="flag">🇭🇰</span> HKD</span></div>
+      <div class="rate-chip" id="widgetRateChip">1 HKD <span class="arrow">→</span> — INR</div>
+      <div class="widget-field receive"><div style="flex:1"><label>They receive</label><div class="amount-display" id="widgetReceiveDisplay">—</div></div><span class="currency-chip"><span class="flag">🇮🇳</span> INR</span></div>
+    </div>
+    <div class="widget-foot"><a href="remittance.html" style="color: var(--brand-dark); font-weight: 600;">See all 14 providers →</a><span class="best-rate-tag">Live quote</span></div>
   </div>
 </section>
 
-<!-- Calculator + filters -->
 <section>
-  <h2>Find your best route</h2>
-  <div class="card">
-    <div class="calc">
-      <div>
-        <label for="hkd">You send (HKD)</label>
-        <input id="hkd" type="number" inputmode="decimal" value="10000" min="0" step="100">
-      </div>
-      <div>
-        <label>Mid-market INR ceiling</label>
-        <div class="out" id="inrOut">—</div>
-      </div>
+  <div class="section-head">
+    <div><h2>Why nriremit?</h2><p class="meta">Four reasons to make this your HK → India home.</p></div>
+  </div>
+  <div class="features-with-strip">
+    <div class="features-grid">
+
+      <a href="remittance.html" class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Honest, verified rates</h3>
+        <p>14+ providers compared on this one corridor — Wise, Instarem, HK banks, Indian NRI bank services. Each quote dated and verified, not scraped and guessed.</p>
+        <span class="feature-link">Compare HKD → INR →</span>
+      </a>
+
+      <a href="guides.html" class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h3>Compliance detail nobody else writes</h3>
+        <p>RBI purpose codes, NRE vs NRO traps, FIRC and eFIRC, HK cutoffs, high-value EDD — the operational stuff Monito and Finder skip because they don't know this corridor.</p>
+        <span class="feature-link">Read the guides →</span>
+      </a>
+
+      <a href="myths.html" class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        <h3>No hype, no false myths</h3>
+        <p>"Zero fee is cheapest." "NRE interest is taxable." "Comparison sites mark up prices." Eight common misconceptions, calmly corrected.</p>
+        <span class="feature-link">Clear the air →</span>
+      </a>
+
+      <a href="india-beat.html" class="feature-card">
+        <div class="feature-icon green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>News from home, every week</h3>
+        <p>India Beat — a weekly round-up of science, sport, startup wins and small human triumphs. The stories you miss between work hours and sleep.</p>
+        <span class="feature-link">This week's edition →</span>
+      </a>
+
     </div>
 
-    <div class="filters">
-      <div>
-        <label>Filters</label>
-        <div class="toggles">
-          <label class="toggle">
-            <input type="checkbox" data-filter="high_value">
-            <span class="toggle-text">
-              <span class="t-title">High-value transfer</span>
-              <span class="t-sub">I'm sending over HKD 120,000</span>
-            </span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" data-filter="iam_smart">
-            <span class="toggle-text">
-              <span class="t-title">iAM Smart onboarding</span>
-              <span class="t-sub">Digital ID, no document upload</span>
-            </span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" data-filter="nre">
-            <span class="toggle-text">
-              <span class="t-title">Routes to NRE account</span>
-              <span class="t-sub">Repatriable, tax-free interest</span>
-            </span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" data-filter="firc">
-            <span class="toggle-text">
-              <span class="t-title">Issues eFIRC</span>
-              <span class="t-sub">For tax filing / loan proof</span>
-            </span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" data-filter="weekend">
-            <span class="toggle-text">
-              <span class="t-title">Processes weekends</span>
-              <span class="t-sub">No Sat/Sun FX conversion lag</span>
-            </span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" data-filter="instant">
-            <span class="toggle-text">
-              <span class="t-title">Instant delivery</span>
-              <span class="t-sub">IMPS, usually under 15 minutes</span>
-            </span>
-          </label>
-        </div>
+    <div class="strip-col">
+    <a href="leftover-citizen.html" class="citizen-sidebar" aria-label="Read The Leftover Citizen — this week's strip">
+      <div class="citizen-sidebar-banner">
+        <span class="citizen-sidebar-eyebrow">The Leftover Citizen</span>
+        <span class="citizen-sidebar-ep">Episode 01</span>
       </div>
-      <div class="sort-row">
-        <div>
-          <label for="sort">Sort by</label>
-          <select id="sort">
-            <option value="rate">Best effective rate (default)</option>
-            <option value="speed">Fastest delivery</option>
-            <option value="fee">Lowest flat fee</option>
-            <option value="name">Provider name (A–Z)</option>
-          </select>
-        </div>
+      <img src="assets/leftover-citizen-ep01.jpg" alt="This week's Leftover Citizen strip — Kotian Uncle on Mumbai Metro 4" loading="lazy">
+      <div class="citizen-sidebar-foot">
+        <span>Read full strip</span>
+        <span class="arrow">→</span>
       </div>
+        </a>
     </div>
   </div>
 </section>
 
-<!-- Providers -->
+<div class="stats-band">
+  <div class="stat-item"><div class="big">14+</div><div class="label">Providers tracked weekly</div></div>
+  <div class="stat-item"><div class="big">Daily</div><div class="label">Mid-market rate updates</div></div>
+  <div class="stat-item"><div class="big">0 ₹</div><div class="label">Added to your fee for using us</div></div>
+  <div class="stat-item"><div class="big">HK</div><div class="label">Based, built, maintained</div></div>
+</div>
+
 <section>
-  <h2>Providers for the HK → India corridor</h2>
-  <p id="provider-meta">Loading…</p>
-  <div id="providers" class="providers"></div>
-</section>
-
-<!-- Guides -->
-<section>
-  <h2>The stuff that trips people up</h2>
-  <div class="card tabs">
-    <nav role="tablist">
-      <button role="tab" aria-selected="true" data-tab="purpose">Purpose codes</button>
-      <button role="tab" aria-selected="false" data-tab="nre">NRE vs NRO vs Resident</button>
-      <button role="tab" aria-selected="false" data-tab="firc">FIRC &amp; eFIRC</button>
-      <button role="tab" aria-selected="false" data-tab="timing">Cutoffs &amp; weekends</button>
-      <button role="tab" aria-selected="false" data-tab="iam">iAM Smart</button>
-      <button role="tab" aria-selected="false" data-tab="hv">High-value (&gt;HKD 120k)</button>
-    </nav>
-
-    <div class="tabpanel" data-tab="purpose" data-active>
-      <h3>Bona fide purposes and RBI purpose codes</h3>
-      <p>Every inbound remittance to India is tagged with an RBI purpose code by the receiving bank. For personal transfers to an NRE/NRO account the bank handles this quietly; for larger or less typical amounts, they may ask you (or the sender) to confirm the purpose.</p>
-      <p>The codes that cover almost all HK → India personal use:</p>
-      <table class="mini-table">
-        <tr><th>Code</th><th>Purpose</th><th>Typical use</th></tr>
-        <tr><td>P1301</td><td>Family maintenance &amp; savings</td><td>Sending home to parents, spouse, children, or your own NRE savings</td></tr>
-        <tr><td>P1306</td><td>Personal gifts &amp; donations</td><td>Birthday, wedding, festival gifts to extended family</td></tr>
-        <tr><td>P1308</td><td>Inheritance</td><td>Transfer of inherited funds</td></tr>
-        <tr><td>P0802</td><td>Software/professional services</td><td>Freelance or consulting income from HK clients</td></tr>
-        <tr><td>P1007</td><td>Travel-related</td><td>Reimbursement of travel costs</td></tr>
-      </table>
-      <div class="callout"><strong>Rule of thumb:</strong> if you're an NRI sending your own HK salary to your own NRE account, you don't need to do anything — the sending provider and receiving bank handle the code. The purpose only becomes a conversation if the amount or pattern looks unusual.</div>
-    </div>
-
-    <div class="tabpanel" data-tab="nre">
-      <h3>NRE vs NRO vs Resident Savings — which account should the money land in?</h3>
-      <p>This is the single most important decision for an NRI, and most providers let you choose at the moment you add the beneficiary. Pick the wrong one and you create tax problems.</p>
-      <table class="mini-table">
-        <tr><th>Account</th><th>Who uses it</th><th>Repatriable?</th><th>Tax on interest</th></tr>
-        <tr><td><strong>NRE</strong> (Non-Resident External)</td><td>NRIs saving foreign-earned income</td><td>Yes, fully</td><td>Tax-free in India</td></tr>
-        <tr><td><strong>NRO</strong> (Non-Resident Ordinary)</td><td>NRIs with India-sourced income (rent, dividends)</td><td>Up to USD 1M/year</td><td>Taxable (TDS applies)</td></tr>
-        <tr><td><strong>Resident Savings</strong></td><td>Resident Indians</td><td>Subject to LRS rules</td><td>Taxable</td></tr>
-      </table>
-      <p><strong>The trap:</strong> if you've moved to Hong Kong but never converted your old resident savings account to NRO, you're technically in FEMA violation every time money lands there. Convert first, remit second.</p>
-      <p><strong>The other trap:</strong> some low-cost providers only route to resident savings accounts. For an NRI that's wrong on day one — the money arrives but it's parked in the wrong vehicle for tax and repatriation. The filter above hides providers that can't do NRE.</p>
-    </div>
-
-    <div class="tabpanel" data-tab="firc">
-      <h3>FIRC and eFIRC — when you actually need the paperwork</h3>
-      <p>A <strong>Foreign Inward Remittance Certificate</strong> (now mostly issued electronically as <strong>eFIRC</strong>) is the receiving bank's proof that money came from outside India. It's not needed for every transfer, but when you need it, you need it.</p>
-      <p>You'll want eFIRC for:</p>
-      <ul>
-        <li><strong>Home loan down payment proof</strong> — Indian lenders will ask for FIRC to confirm the source of your contribution.</li>
-        <li><strong>Tax filing</strong> — if you're declaring foreign-source income or claiming DTAA benefits.</li>
-        <li><strong>Property purchase</strong> — the registrar may ask for proof of foreign remittance.</li>
-        <li><strong>Freelancer/exporter GST compliance</strong> — eFIRC is a key document for export of services.</li>
-        <li><strong>Future repatriation from NRE/NRO</strong> — proves the funds were originally remitted from abroad.</li>
-      </ul>
-      <p>Not every provider issues eFIRC smoothly. Bank-to-bank wires always do (your receiving bank issues it). Fintechs vary — Wise and Instarem will issue on request, usually within 2–5 business days. Some aggregators route through partner banks and the eFIRC comes from the partner, which can take longer and requires chasing. The filter above hides providers that don't issue it reliably.</p>
-    </div>
-
-    <div class="tabpanel" data-tab="timing">
-      <h3>Cutoff times, weekends, and holiday lag</h3>
-      <p>"Instant" is a half-truth on this corridor. The HKD leg, the FX conversion, and the INR leg each have their own cutoffs — and the slowest one determines when your money actually arrives.</p>
-      <h4>Hong Kong side (funding)</h4>
-      <ul>
-        <li><strong>FPS (Faster Payment System):</strong> 24/7, HKD funds reach the provider in seconds. This is almost always the fastest funding method.</li>
-        <li><strong>Local HKD transfer / CHATS:</strong> business hours only; after 5pm HKT or weekends, it waits until the next business day.</li>
-        <li><strong>Debit/credit card:</strong> instant but adds 0.5–2% in card processing cost on top of the FX margin.</li>
-      </ul>
-      <h4>FX conversion</h4>
-      <ul>
-        <li>Interbank FX markets close Friday 5pm New York (Saturday 5am HKT) and reopen Sunday 5pm New York (Monday 6am HKT).</li>
-        <li>Providers that queue FX over the weekend will convert at Monday morning rates — if HKD weakens over the weekend, you lose. Some lock the rate at the moment you send; check this.</li>
-      </ul>
-      <h4>India side (delivery)</h4>
-      <ul>
-        <li><strong>IMPS:</strong> 24/7, instant to the recipient's bank account. The gold standard for small-to-mid transfers.</li>
-        <li><strong>NEFT:</strong> 24/7 since 2019, settles in half-hourly batches. Fine for larger amounts.</li>
-        <li><strong>RTGS:</strong> 24/7 since 2020, instant settlement, used for high-value (above INR 2 lakh).</li>
-        <li><strong>Public holidays:</strong> all three systems operate, but <em>recipient banks may delay credit</em> on major holidays (Diwali, Holi, Republic Day). Private banks are usually faster than PSU banks here.</li>
-      </ul>
-      <div class="callout"><strong>Practical timing:</strong> If you send via Wise or Instarem using FPS on a weekday morning HKT, money lands in a private-bank NRE account within 2–4 hours. Same transfer on Saturday evening? Expect Monday afternoon.</div>
-    </div>
-
-    <div class="tabpanel" data-tab="iam">
-      <h3>iAM Smart — HK's digital ID and why it matters for onboarding</h3>
-      <p><strong>iAM Smart</strong> is the Hong Kong government's digital identity service, launched in late 2020. If you've registered (via the app plus a one-time registration at a self-service kiosk or participating bank), it functions as a digitally-verified HKID.</p>
-      <p>The upshot for remittance onboarding: a provider integrated with iAM Smart can KYC you in under five minutes with no HKID photo upload, no proof-of-address wait, no manual review queue. For HK residents in serviced apartments, shared housing, or company-provided accommodation — where "proof of address" is a recurring headache — this is a material time saver.</p>
-      <p>Integration status (verify directly before relying on this):</p>
-      <ul>
-        <li><strong>Local HK banks</strong> (HSBC HK, Hang Seng, BOCHK, DBS HK, Standard Chartered HK): most support iAM Smart for account opening, which indirectly means their remittance product does too.</li>
-        <li><strong>International fintechs</strong> (Wise, Instarem, Remitly, OrbitRemit): typically do not integrate directly; they run their own KYC flow with HKID upload. Still fast (10–20 minutes) but requires document photos.</li>
-        <li><strong>Panda Remit, WorldRemit, XE:</strong> own KYC, no iAM Smart.</li>
-      </ul>
-      <p>If instant onboarding matters more to you than an extra 0.2% on the FX margin, the HK-bank remittance route via iAM Smart is worth the small premium.</p>
-    </div>
-
-    <div class="tabpanel" data-tab="hv">
-      <h3>High-value transfers — above HKD 120,000</h3>
-      <p>HKD 120,000 is a soft threshold on this corridor. It's not a legal limit (there's no HKMA cap on outbound personal remittance), but it's the amount above which most providers trigger <strong>enhanced due diligence (EDD)</strong>: a one-time additional check that can delay a first-time high-value transfer by hours or days.</p>
-      <p>What EDD looks like:</p>
-      <ul>
-        <li><strong>Source-of-funds documentation:</strong> payslip, employment letter, or sale deed for the amount.</li>
-        <li><strong>Purpose confirmation:</strong> a dropdown or free-text explanation of why you're sending this amount.</li>
-        <li><strong>Beneficiary verification:</strong> extra checks on the receiving account, sometimes a confirmation call.</li>
-      </ul>
-      <p>Providers handle this very differently:</p>
-      <ul>
-        <li><strong>HK banks (HSBC, DBS, BOCHK)</strong>: handle high-value smoothly because you're already KYC'd for the full relationship. Often the right choice for one-off large transfers.</li>
-        <li><strong>Wise, Instarem</strong>: automated EDD, usually resolved same day on second attempt if docs are clean.</li>
-        <li><strong>Smaller fintechs</strong>: may put you in a manual review queue for 1–3 days. Fine if you planned ahead, painful if you didn't.</li>
-      </ul>
-      <p>On the India side, there is <strong>no cap</strong> on inbound remittance to an NRE account. Resident savings deposits above INR 10 lakh in a financial year get reported to the Income Tax Department (SFT reporting) — not a problem, just something to be aware of.</p>
-      <div class="callout"><strong>If you're sending more than HKD 500,000 in one go</strong>, the smartest route is almost always your existing HK bank's remittance product, even if the FX margin is 20–40 bps worse than a fintech. The documentation audit trail is cleaner and the processing is more predictable.</div>
-    </div>
+  <div class="section-head">
+    <div><h2>From this week's "India Beat"</h2><p class="meta">Three stories from home.</p></div>
+    <a href="india-beat.html" style="color: var(--brand-dark); font-weight: 600;">View all →</a>
+  </div>
+  <div class="news-grid">
+    <article class="news-card">
+      <div class="news-visual v1" style="background-image: url('https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=500&fit=crop&q=80&auto=format'), linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%); background-size: cover; background-position: center;"><span class="news-tag">Science</span>
+      </div>
+      <div class="news-body">
+        <span class="news-meta">Example · Replace with current headline</span>
+        <h3 class="news-title">ISRO's next launch window opens, mission brief released this week</h3>
+        <p class="news-excerpt">Sample card. Replace with real curated headlines in your weekly update.</p>
+        <div class="news-footer"><span class="author">By — editor</span><span class="arrow">→</span></div>
+      </div>
+    </article>
+    <article class="news-card">
+      <div class="news-visual v2" style="background-image: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&h=500&fit=crop&q=80&auto=format'), linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%); background-size: cover; background-position: center;"><span class="news-tag">Sport</span>
+      </div>
+      <div class="news-body">
+        <span class="news-meta">Example · Replace with current headline</span>
+        <h3 class="news-title">India women's team on a 6-match streak — series preview</h3>
+        <p class="news-excerpt">Sample card. The idea: 3 feel-good headlines each week.</p>
+        <div class="news-footer"><span class="author">By — editor</span><span class="arrow">→</span></div>
+      </div>
+    </article>
+    <article class="news-card">
+      <div class="news-visual v3" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop&q=80&auto=format'), linear-gradient(135deg, #dcfce7 0%, #86efac 100%); background-size: cover; background-position: center;"><span class="news-tag">Startups</span>
+      </div>
+      <div class="news-body">
+        <span class="news-meta">Example · Replace with current headline</span>
+        <h3 class="news-title">Chennai deep-tech startup lands first US enterprise contract</h3>
+        <p class="news-excerpt">Over time, this section becomes the thing readers open the site for.</p>
+        <div class="news-footer"><span class="author">By — editor</span><span class="arrow">→</span></div>
+      </div>
+    </article>
   </div>
 </section>
 
 <div class="disclaimer">
-  <strong>Disclaimer.</strong> This site is an independent informational directory. It is not authorised by the HKMA, SFC, or RBI and does not provide money service operator (MSO) activity, financial advice, or personalised recommendations. Rates and fees shown are indicative — the mid-market rate is live from a public FX feed, provider-specific data is manually curated and dated. Links to providers may be affiliate links; if you sign up through them, this site may earn a referral payment at no cost to you. Always verify fees, rates, routing, and eligibility on the provider's own site before transferring money. Nothing on this page constitutes tax, legal, or investment advice.
+  <strong>Disclaimer.</strong> nriremit is an independent informational directory. Not authorised by the HKMA, SFC or RBI. Rates shown are indicative; verify directly with providers. Links to providers may be affiliate links. Myths &amp; Facts and India Beat are editorial content — verify facts against primary sources. Nothing here constitutes tax, legal, or investment advice.
 </div>
 
-<footer>
-  <p>Built by hand · Provider data verified weekly · <a href="#">About</a> · <a href="#">Methodology</a> · <a href="#">Contact</a></p>
+</div>
+
+<footer class="site">
+  <div class="inner">
+    <div class="brand">
+      <div class="footer-logo"><img src="assets/logo.png" alt="nriremit"></div>
+      <p>Honest HKD → INR remittance comparison for Hong Kong NRIs. Independent, compliance-aware, with a little bit of soul.</p>
+      <div class="social"><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="Instagram">◉</a><a href="#" aria-label="LinkedIn">in</a></div>
+    </div>
+    <div><h5>Compare</h5><ul><li><a href="remittance.html">HKD → INR</a></li><li><a href="remittance.html">All providers</a></li><li><a href="#">By corridor (soon)</a></li></ul></div>
+    <div><h5>Learn</h5><ul><li><a href="guides.html">Compliance guides</a></li><li><a href="myths.html">Myths &amp; Facts</a></li></ul></div>
+    <div><h5>Columns</h5><ul><li><a href="india-beat.html">India Beat</a></li><li><a href="leftover-citizen.html">The Leftover Citizen</a></li><li><a href="mailto:hello@nriremit.com">Contact</a></li></ul></div>
+  </div>
+  <div class="disclaim"><strong>Disclaimer:</strong> nriremit provides comparison information only. We are not a financial advisor, bank, or money transfer operator. Always verify rates and fees directly with providers before initiating a transfer.</div>
+  <div class="copyright"><span>© 2026 nriremit. All rights reserved.</span><div class="links"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a></div></div>
 </footer>
 
-</div>
-
-<script>
-/* ---------------------------------------------------------------------------
- * Curated provider data.
- * Edit this block to update what the site shows. Bump last_verified each time.
- * Live fee/rate overrides come from rates.json (produced by scraper.py).
- * ------------------------------------------------------------------------- */
-const PROVIDERS = [
-  {
-    id: "wise",
-    name: "Wise",
-    host: "wise.com",
-    desc: "Transparent fee + FX margin, usually the cheapest for small-to-mid HKD amounts. Supports NRE/NRO/resident routing and issues eFIRC on request.",
-    fee_flat_hkd: 42,
-    fx_margin_pct: 0.52,
-    delivery_minutes: 180,
-    max_single_transfer_hkd: 1000000,
-    high_value_friendly: true,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: true,
-    instant_imps: true,
-    onboarding_minutes: 15,
-    affiliate_url: "https://wise.com/invite/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "instarem",
-    name: "Instarem",
-    host: "instarem.com",
-    desc: "Zero flat fee on HKD→INR, revenue comes from the FX margin which widens on small amounts. Loyalty InstaPoints reduce margin for repeat senders.",
-    fee_flat_hkd: 0,
-    fx_margin_pct: 0.55,
-    delivery_minutes: 240,
-    max_single_transfer_hkd: 1000000,
-    high_value_friendly: true,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: true,
-    instant_imps: true,
-    onboarding_minutes: 20,
-    affiliate_url: "https://www.instarem.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "panda",
-    name: "Panda Remit",
-    host: "pandaremit.com",
-    desc: "Primarily a China-outbound platform with HK → India support. Strong first-transfer promos; standard rates are mid-pack. Confirm NRE routing before using.",
-    fee_flat_hkd: 15,
-    fx_margin_pct: 0.80,
-    delivery_minutes: 360,
-    max_single_transfer_hkd: 500000,
-    high_value_friendly: false,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: false,
-    weekend_processing: true,
-    instant_imps: true,
-    onboarding_minutes: 25,
-    affiliate_url: "https://www.pandaremit.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "remitly",
-    name: "Remitly",
-    host: "remitly.com",
-    desc: "Two speed tiers — Economy (cheaper, 3–5 business days) and Express (card-funded, instant). Fee varies by tier and amount. Supports Indian bank deposit including NRE.",
-    fee_flat_hkd: 30,
-    fx_margin_pct: 0.70,
-    delivery_minutes: 60,
-    max_single_transfer_hkd: 300000,
-    high_value_friendly: false,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: false,
-    weekend_processing: true,
-    instant_imps: true,
-    onboarding_minutes: 15,
-    affiliate_url: "https://www.remitly.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "orbitremit",
-    name: "OrbitRemit",
-    host: "orbitremit.com",
-    desc: "NZ-based remittance specialist with HK presence. Flat fee of HKD 25–50 depending on amount, tight FX margin. Known for predictable pricing on larger transfers.",
-    fee_flat_hkd: 40,
-    fx_margin_pct: 0.45,
-    delivery_minutes: 300,
-    max_single_transfer_hkd: 500000,
-    high_value_friendly: true,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: false,
-    instant_imps: false,
-    onboarding_minutes: 25,
-    affiliate_url: "https://www.orbitremit.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "xe",
-    name: "XE Money Transfer",
-    host: "xe.com",
-    desc: "Long-established FX firm, zero flat fee on most retail amounts, revenue in the margin. Better for mid-to-large transfers (HKD 50k+). NRE supported.",
-    fee_flat_hkd: 0,
-    fx_margin_pct: 0.75,
-    delivery_minutes: 1440,
-    max_single_transfer_hkd: 2000000,
-    high_value_friendly: true,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: false,
-    instant_imps: false,
-    onboarding_minutes: 30,
-    affiliate_url: "https://www.xe.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "wu",
-    name: "Western Union",
-    host: "westernunion.com",
-    desc: "Legacy player. High fees and wide FX margin, but ubiquitous cash pickup across India. Only choose this if the recipient lacks a bank account.",
-    fee_flat_hkd: 60,
-    fx_margin_pct: 2.20,
-    delivery_minutes: 30,
-    max_single_transfer_hkd: 2000000,
-    high_value_friendly: true,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: true,
-    instant_imps: true,
-    onboarding_minutes: 15,
-    affiliate_url: "https://www.westernunion.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "mg",
-    name: "MoneyGram",
-    host: "moneygram.com",
-    desc: "Similar footprint to Western Union — strong cash pickup network, uncompetitive for bank-to-bank transfers. Rarely the right choice for salaried NRIs.",
-    fee_flat_hkd: 55,
-    fx_margin_pct: 2.00,
-    delivery_minutes: 30,
-    max_single_transfer_hkd: 1500000,
-    high_value_friendly: true,
-    iam_smart: false,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: true,
-    instant_imps: true,
-    onboarding_minutes: 15,
-    affiliate_url: "https://www.moneygram.com/",
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "hsbc",
-    name: "HSBC Global Transfers",
-    host: "hsbc.com.hk",
-    desc: "For existing HSBC HK customers. Free or near-free to HSBC India accounts, modest fee to other Indian banks. iAM Smart supported for account opening. Handles high-value cleanly with established relationship.",
-    fee_flat_hkd: 0,
-    fx_margin_pct: 1.50,
-    delivery_minutes: 60,
-    max_single_transfer_hkd: 5000000,
-    high_value_friendly: true,
-    iam_smart: true,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: false,
-    instant_imps: false,
-    onboarding_minutes: 5,
-    affiliate_url: null,
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "dbs",
-    name: "DBS Remit (DBS HK)",
-    host: "dbs.com.hk",
-    desc: "For existing DBS HK customers. Zero fee, tight FX margin on the DBS Remit product. iAM Smart supported for onboarding. One of the best bank-side options on this corridor.",
-    fee_flat_hkd: 0,
-    fx_margin_pct: 0.80,
-    delivery_minutes: 60,
-    max_single_transfer_hkd: 3000000,
-    high_value_friendly: true,
-    iam_smart: true,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: false,
-    instant_imps: false,
-    onboarding_minutes: 10,
-    affiliate_url: null,
-    last_verified: "2026-10-27"
-  },
-  {
-    id: "bochk",
-    name: "Bank of China (Hong Kong)",
-    host: "bochk.com",
-    desc: "Mainstream HK retail bank with India remittance. Higher margin than fintechs but iAM Smart onboarding and smooth high-value handling for existing customers.",
-    fee_flat_hkd: 50,
-    fx_margin_pct: 1.80,
-    delivery_minutes: 1440,
-    max_single_transfer_hkd: 3000000,
-    high_value_friendly: true,
-    iam_smart: true,
-    nre: true, nro: true, resident: true,
-    firc: true,
-    weekend_processing: false,
-    instant_imps: false,
-    onboarding_minutes: 5,
-    affiliate_url: null,
-    last_verified: "2026-10-27"
-  }
-];
-
-const FALLBACK_RATE = 10.78;
-const FALLBACK_DATE = "2026-10-27";
-
-const rateEl   = document.getElementById("rate");
-const metaEl   = document.getElementById("rateMeta");
-const hkdEl    = document.getElementById("hkd");
-const inrEl    = document.getElementById("inrOut");
-const btn      = document.getElementById("refreshBtn");
-const sortEl   = document.getElementById("sort");
-const listEl   = document.getElementById("providers");
-const metaInfo = document.getElementById("provider-meta");
-
-let midRate = null;
-let liveOverrides = {};
-
-/* ---- Mid-market rate ----------------------------------------------------- */
-function fmtINR(n, max=2) {
-  if (!isFinite(n)) return "—";
-  return "₹ " + n.toLocaleString("en-IN", { maximumFractionDigits: max, minimumFractionDigits: Math.min(max, 2) });
-}
-function fmtRate(n) {
-  return n.toLocaleString("en-IN", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
-}
-function recalcCalc() {
-  const hkd = parseFloat(hkdEl.value);
-  if (!midRate || !isFinite(hkd)) { inrEl.textContent = "—"; return; }
-  inrEl.textContent = fmtINR(hkd * midRate);
-}
-
-async function loadMidRate() {
-  metaEl.textContent = "Fetching…";
-     const url = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/hkd.json?t=" + Date.now();
-     try {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const data = await r.json();
-    const inr = data && data.hkd && data.hkd.inr;
-    if (!inr) throw new Error("No INR in response");
-    midRate = inr;
-    rateEl.textContent = fmtRate(inr) + " INR";
-    const when = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" });
-    metaEl.textContent = "Mid-market reference · fetched " + when + " IST";
-  } catch (e) {
-    midRate = FALLBACK_RATE;
-    rateEl.textContent = fmtRate(FALLBACK_RATE) + " INR";
-    metaEl.textContent = "Live fetch failed — showing last-known rate from " + FALLBACK_DATE;
-  }
-  recalcCalc();
-  render();
-}
-
-/* ---- Scraped overrides (from rates.json produced by scraper.py) ---------- */
-async function loadLiveOverrides() {
-  try {
-    const r = await fetch("rates.json?t=" + Date.now(), { cache: "no-store" });
-    if (!r.ok) return;
-    const data = await r.json();
-    if (data && data.providers) {
-      liveOverrides = Object.fromEntries(data.providers.map(p => [p.id, p]));
-    }
-  } catch (_) { /* ok, no file yet */ }
-}
-
-/* ---- Filters + sort + render -------------------------------------------- */
-function getFilters() {
-  const f = {};
-  document.querySelectorAll("[data-filter]").forEach(el => {
-    if (el.checked) f[el.dataset.filter] = true;
-  });
-  return f;
-}
-function passes(p, f) {
-  const hkd = parseFloat(hkdEl.value) || 0;
-  if (f.high_value) {
-    if (!p.high_value_friendly) return false;
-    if (p.max_single_transfer_hkd < 120000) return false;
-  }
-  if (f.iam_smart && !p.iam_smart) return false;
-  if (f.nre && !p.nre) return false;
-  if (f.firc && !p.firc) return false;
-  if (f.weekend && !p.weekend_processing) return false;
-  if (f.instant && !p.instant_imps) return false;
-  if (hkd && p.max_single_transfer_hkd && hkd > p.max_single_transfer_hkd) return false;
-  return true;
-}
-function effectiveINR(p) {
-  const hkd = parseFloat(hkdEl.value) || 0;
-  if (!midRate || !hkd) return null;
-  const live = liveOverrides[p.id] || {};
-  const flat = live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd;
-  const margin = live.fx_margin_pct != null ? live.fx_margin_pct : p.fx_margin_pct;
-  const sendAfterFee = Math.max(0, hkd - flat);
-  const effectiveRate = midRate * (1 - margin / 100);
-  return { net_inr: sendAfterFee * effectiveRate, rate: effectiveRate, flat, margin, live_source: live.source };
-}
-function sorter(mode) {
-  return (a, b) => {
-    const ea = effectiveINR(a), eb = effectiveINR(b);
-    switch (mode) {
-      case "speed": return a.delivery_minutes - b.delivery_minutes;
-      case "fee":   return a.fee_flat_hkd - b.fee_flat_hkd;
-      case "name":  return a.name.localeCompare(b.name);
-      case "rate":
-      default:
-        if (!ea || !eb) return 0;
-        return eb.net_inr - ea.net_inr;
-    }
-  };
-}
-function fmtDelivery(mins) {
-  if (mins <= 60) return "Under 1 hour";
-  if (mins <= 240) return Math.round(mins/60) + " hours";
-  if (mins <= 1440) return Math.round(mins/60) + " hours";
-  return Math.round(mins/1440) + " days";
-}
-function badge(txt, cls) { return `<span class="badge ${cls}">${txt}</span>`; }
-
-function render() {
-  const f = getFilters();
-  const list = PROVIDERS.filter(p => passes(p, f)).sort(sorter(sortEl.value));
-  if (!list.length) {
-    listEl.innerHTML = `<div class="empty">No providers match these filters. Try loosening one — e.g. remove the "instant delivery" or "weekend processing" requirement.</div>`;
-    metaInfo.textContent = `0 of ${PROVIDERS.length} providers shown.`;
-    return;
-  }
-  metaInfo.textContent = `${list.length} of ${PROVIDERS.length} providers shown · sorted by ${sortEl.options[sortEl.selectedIndex].text.toLowerCase()}.`;
-
-  listEl.innerHTML = list.map(p => {
-    const eff = effectiveINR(p);
-    const badges = [
-      p.iam_smart ? badge("iAM Smart", "good") : null,
-      p.nre ? badge("NRE routing", "good") : null,
-      p.firc ? badge("eFIRC", "good") : badge("No eFIRC", "warn"),
-      p.weekend_processing ? badge("Weekend FX", "good") : badge("Weekday FX only", "warn"),
-      p.instant_imps ? badge("Instant IMPS", "good") : badge("Batched delivery", "neutral"),
-      p.high_value_friendly ? null : badge("Not for >HKD 120k", "warn"),
-    ].filter(Boolean).join("");
-
-    const ctaBlock = p.affiliate_url
-      ? `<a class="cta" href="${p.affiliate_url}" rel="nofollow sponsored noopener" target="_blank">Check live quote →</a>`
-      : `<span class="cta ghost">Existing customers only</span>`;
-
-    const liveTag = eff && eff.live_source === "api"
-      ? `<div class="live-rate">Live quote: <span class="v">${fmtINR(eff.net_inr)}</span></div>`
-      : eff
-        ? `<div class="live-rate">Estimated: <span class="v">${fmtINR(eff.net_inr)}</span></div>`
-        : "";
-
-    return `
-      <article class="card provider" data-id="${p.id}">
-        <div>
-          <div class="head">
-            <span class="name">${p.name}</span>
-            <span class="host">${p.host}</span>
-          </div>
-          <div class="badges">${badges}</div>
-          <p class="desc">${p.desc}</p>
-          <div class="specs">
-            <div class="spec"><div class="k">Flat fee</div><div class="v">HKD ${p.fee_flat_hkd}</div></div>
-            <div class="spec"><div class="k">FX margin</div><div class="v">~${p.fx_margin_pct}%</div></div>
-            <div class="spec"><div class="k">Typical delivery</div><div class="v">${fmtDelivery(p.delivery_minutes)}</div></div>
-            <div class="spec"><div class="k">Max single transfer</div><div class="v">HKD ${p.max_single_transfer_hkd.toLocaleString("en")}</div></div>
-            <div class="spec"><div class="k">Onboarding</div><div class="v">~${p.onboarding_minutes} min</div></div>
-          </div>
-          <span class="verified">Last verified: ${p.last_verified}</span>
-        </div>
-        <div class="cta-col">
-          ${ctaBlock}
-          ${liveTag}
-        </div>
-      </article>
-    `;
-  }).join("");
-}
-
-/* ---- Tabs --------------------------------------------------------------- */
-document.querySelectorAll("[role=tab]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const name = btn.dataset.tab;
-    document.querySelectorAll("[role=tab]").forEach(b => b.setAttribute("aria-selected", b === btn ? "true" : "false"));
-    document.querySelectorAll(".tabpanel").forEach(p => {
-      if (p.dataset.tab === name) p.setAttribute("data-active", ""); else p.removeAttribute("data-active");
-    });
-  });
-});
-
-/* ---- Wiring ------------------------------------------------------------- */
-hkdEl.addEventListener("input", () => { recalcCalc(); render(); });
-sortEl.addEventListener("change", render);
-document.querySelectorAll("[data-filter]").forEach(el => el.addEventListener("change", render));
-btn.addEventListener("click", loadMidRate);
-
-(async () => {
-  await loadLiveOverrides();
-  await loadMidRate();   // triggers render after rate lands
-})();
-</script>
+<script src="assets/midrate.js"></script>
 </body>
 </html>
