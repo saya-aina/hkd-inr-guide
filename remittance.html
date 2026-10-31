@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Remittance — HKD → INR comparison | nriremit</title>
-<meta name="description" content="Compare live HKD to INR exchange rates across 14+ providers. iAM Smart onboarding, NRE routing, FIRC availability — the HK-India specifics generic comparison sites skip.">
+<meta name="description" content="Compare HKD to INR rates and fees across 14 providers. iAM Smart onboarding, NRE routing, FIRC availability — the HK-India specifics generic comparison sites skip.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
@@ -30,13 +30,13 @@
 
 <section class="hero">
   <div>
-    <div class="hero-badge"><span class="dot"></span> Live quotes from 14+ providers · Hong Kong → India</div>
+    <div class="hero-badge"><span class="dot"></span> Compare 14 providers · Hong Kong → India</div>
     <h1 class="hero-head">Find the best <span class="accent">HKD→INR rates</span>.</h1>
-    <p class="hero-sub">Compare live quotes from Wise, Instarem, HK banks and more — with iAM Smart onboarding, NRE routing, FIRC and high-value compliance filters you won't find on generic comparison sites.</p>
+    <p class="hero-sub">Compare rates and fees from Wise, Instarem, HK banks and more — with iAM Smart onboarding, NRE routing, FIRC and high-value compliance filters you won't find on generic comparison sites.</p>
     <div class="hero-tip"><span class="i">i</span><p><strong>Pro tip:</strong> <strong>Wise</strong> and <strong>Instarem</strong> consistently offer the tightest FX margins on this corridor. <strong>Western Union</strong> is surprisingly competitive for small amounts (HK$5 fee), capped at HKD 15,000 per transfer. HK banks via iAM Smart are worth the small premium if you're onboarding fast.</p></div>
   </div>
   <div class="widget">
-    <div class="widget-head"><span class="widget-title">Transfer Money</span><span class="live-badge">Live Rates</span></div>
+    <div class="widget-head"><span class="widget-title">Transfer Money</span><span class="live-badge">Mid-market rate</span></div>
     <div class="widget-swap">
       <div class="widget-field"><div style="flex:1"><label>You send</label><div class="amount-display" id="widgetSendDisplay">10,000</div></div><span class="currency-chip"><span class="flag">🇭🇰</span> HKD</span></div>
       <div class="rate-chip" id="widgetRateChip">1 HKD <span class="arrow">→</span> — INR</div>
@@ -112,19 +112,6 @@
   </div>
   <aside class="side">
     <div class="side-card">
-      <h3>Market Trend <span class="trend-up">+0.3% THIS WEEK</span></h3>
-      <div class="chart">
-        <svg viewBox="0 0 300 120" width="100%" height="110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <defs><linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#2563eb" stop-opacity="0.4"/><stop offset="100%" stop-color="#2563eb" stop-opacity="0"/></linearGradient></defs>
-          <path d="M 0 80 L 50 70 L 100 75 L 150 50 L 200 45 L 250 30 L 300 20 L 300 120 L 0 120 Z" fill="url(#chartFill)"/>
-          <path d="M 0 80 L 50 70 L 100 75 L 150 50 L 200 45 L 250 30 L 300 20" stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="300" cy="20" r="4" fill="#1e3a8a"/>
-        </svg>
-        <div class="chart-labels"><span>Mon</span><span>Wed</span><span>Fri</span><span>Today</span></div>
-      </div>
-      <p class="chart-note">The <strong>HKD → INR</strong> rate is near a weekly high. If you're planning a large transfer, consider locking in soon.</p>
-    </div>
-    <div class="side-card">
       <h3>How nriremit works</h3>
       <div class="steps">
         <div class="step"><div class="step-no">1</div><div class="step-body"><h4>Compare Rates</h4><p>We track live rates from Wise plus curated quotes for 10+ other providers.</p></div></div>
@@ -160,22 +147,22 @@
 <script>
 const PROVIDERS = [
   // ===== Fintechs — verified from provider sites on 2026-10-31 (HKD 10,000 → INR) =====
-  { id: "wise", name: "Wise", host: "wise.com", avatar: "W", rating: 4.6, reviews: 3978, fee_flat_hkd: 60, fx_margin_pct: 0.00, delivery_minutes: 1, delivery_label: "Seconds", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://wise.com/invite/", last_verified: "2026-10-31" },
-  { id: "instarem", name: "Instarem", host: "instarem.com", avatar: "I", rating: 4.4, reviews: 2268, fee_flat_hkd: 59, fx_margin_pct: 0.09, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.instarem.com/", last_verified: "2026-10-31" },
-  { id: "wu", name: "Western Union", host: "westernunion.com", avatar: "W", rating: 3.8, reviews: 5892, fee_flat_hkd: 5, fx_margin_pct: 0.29, delivery_minutes: 1, delivery_label: "Real-time", max_single_transfer_hkd: 15000, high_value_friendly: false, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.westernunion.com/", last_verified: "2026-10-31" },
-  { id: "panda", name: "Panda Remit", host: "pandaremit.com", avatar: "P", rating: 4.3, reviews: 1842, fee_flat_hkd: 100, fx_margin_pct: 0.48, delivery_minutes: 120, delivery_label: "2 Hrs", max_single_transfer_hkd: 100000, high_value_friendly: false, iam_smart: false, nre: true, firc: false, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.pandaremit.com/", last_verified: "2026-10-31" },
-  { id: "mg", name: "MoneyGram", host: "moneygram.com", avatar: "M", rating: 3.7, reviews: 2349, fee_flat_hkd: 8, fx_margin_pct: 0.99, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 1500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.moneygram.com/", last_verified: "2026-10-31" },
+  { id: "wise", name: "Wise", host: "wise.com", avatar: "W", fee_flat_hkd: 60, fx_margin_pct: 0.00, delivery_minutes: 1, delivery_label: "Seconds", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://wise.com/invite/", last_verified: "2026-10-31" },
+  { id: "instarem", name: "Instarem", host: "instarem.com", avatar: "I", fee_flat_hkd: 59, fx_margin_pct: 0.09, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.instarem.com/", last_verified: "2026-10-31" },
+  { id: "wu", name: "Western Union", host: "westernunion.com", avatar: "W", fee_flat_hkd: 5, fx_margin_pct: 0.29, delivery_minutes: 1, delivery_label: "Real-time", max_single_transfer_hkd: 15000, high_value_friendly: false, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.westernunion.com/", last_verified: "2026-10-31" },
+  { id: "panda", name: "Panda Remit", host: "pandaremit.com", avatar: "P", fee_flat_hkd: 100, fx_margin_pct: 0.48, delivery_minutes: 120, delivery_label: "2 Hrs", max_single_transfer_hkd: 100000, high_value_friendly: false, iam_smart: false, nre: true, firc: false, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.pandaremit.com/", last_verified: "2026-10-31" },
+  { id: "mg", name: "MoneyGram", host: "moneygram.com", avatar: "M", fee_flat_hkd: 8, fx_margin_pct: 0.99, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 1500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.moneygram.com/", last_verified: "2026-10-31" },
   // ===== Indian bank NRI remittance services — INDICATIVE (needs manual verification) =====
-  { id: "aspora", name: "Aspora", host: "aspora.com", avatar: "A", rating: 4.5, reviews: 3978, fee_flat_hkd: 0, fx_margin_pct: 0.30, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 2000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: null, last_verified: null },
-  { id: "axisremit", name: "Axis Remit", host: "axisbank.com", avatar: "A", rating: 4.1, reviews: 2484, fee_flat_hkd: 0, fx_margin_pct: 0.60, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
-  { id: "hdfc", name: "HDFC RemitNow", host: "hdfcbank.com", avatar: "H", rating: 4.0, reviews: 2726, fee_flat_hkd: 0, fx_margin_pct: 0.50, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
-  { id: "kotak", name: "Kotak Remit", host: "kotak.com", avatar: "K", rating: 4.0, reviews: 1516, fee_flat_hkd: 0, fx_margin_pct: 0.65, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
-  { id: "icici", name: "ICICI Money2India", host: "money2india.com", avatar: "I", rating: 4.0, reviews: 2412, fee_flat_hkd: 0, fx_margin_pct: 0.55, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
-  { id: "federalbank", name: "Federal Bank NRI", host: "federalbank.co.in", avatar: "F", rating: 4.1, reviews: 4683, fee_flat_hkd: 0, fx_margin_pct: 0.60, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
+  { id: "aspora", name: "Aspora", host: "aspora.com", avatar: "A", fee_flat_hkd: 0, fx_margin_pct: 0.30, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 2000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: null, last_verified: null },
+  { id: "axisremit", name: "Axis Remit", host: "axisbank.com", avatar: "A", fee_flat_hkd: 0, fx_margin_pct: 0.60, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
+  { id: "hdfc", name: "HDFC RemitNow", host: "hdfcbank.com", avatar: "H", fee_flat_hkd: 0, fx_margin_pct: 0.50, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
+  { id: "kotak", name: "Kotak Remit", host: "kotak.com", avatar: "K", fee_flat_hkd: 0, fx_margin_pct: 0.65, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
+  { id: "icici", name: "ICICI Money2India", host: "money2india.com", avatar: "I", fee_flat_hkd: 0, fx_margin_pct: 0.55, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
+  { id: "federalbank", name: "Federal Bank NRI", host: "federalbank.co.in", avatar: "F", fee_flat_hkd: 0, fx_margin_pct: 0.60, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
   // ===== HK banks — indicative only (existing-customer product; sites require login for live quote) =====
-  { id: "hsbc", name: "HSBC Global Transfers", host: "hsbc.com.hk", avatar: "H", rating: 4.0, reviews: 4683, fee_flat_hkd: 0, fx_margin_pct: 1.50, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 5000000, high_value_friendly: true, iam_smart: true, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: "2026-10-27" },
-  { id: "dbs", name: "DBS Remit (DBS HK)", host: "dbs.com.hk", avatar: "D", rating: 4.3, reviews: 2726, fee_flat_hkd: 0, fx_margin_pct: 0.80, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 3000000, high_value_friendly: true, iam_smart: true, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: "2026-10-27" },
-  { id: "bochk", name: "Bank of China (HK)", host: "bochk.com", avatar: "B", rating: 3.9, reviews: 2412, fee_flat_hkd: 50, fx_margin_pct: 1.80, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 3000000, high_value_friendly: true, iam_smart: true, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: "2026-10-27" }
+  { id: "hsbc", name: "HSBC Global Transfers", host: "hsbc.com.hk", avatar: "H", fee_flat_hkd: 0, fx_margin_pct: 1.50, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 5000000, high_value_friendly: true, iam_smart: true, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: "2026-10-27" },
+  { id: "dbs", name: "DBS Remit (DBS HK)", host: "dbs.com.hk", avatar: "D", fee_flat_hkd: 0, fx_margin_pct: 0.80, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 3000000, high_value_friendly: true, iam_smart: true, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: "2026-10-27" },
+  { id: "bochk", name: "Bank of China (HK)", host: "bochk.com", avatar: "B", fee_flat_hkd: 50, fx_margin_pct: 1.80, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 3000000, high_value_friendly: true, iam_smart: true, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: "2026-10-27" }
 ];
 
 const hkdEl = document.getElementById("hkd");
@@ -226,11 +213,11 @@ function sorter(mode) {
       case "speed": return a.delivery_minutes - b.delivery_minutes;
       case "fee": return a.fee_flat_hkd - b.fee_flat_hkd;
       case "name": return a.name.localeCompare(b.name);
-      default: if (!ea || !eb) return 0; return eb.net_inr - ea.net_inr;
+      default: if (!!a.last_verified !== !!b.last_verified) return a.last_verified ? -1 : 1; // verified/live first, unverified last
+        if (!ea || !eb) return 0; return eb.net_inr - ea.net_inr;
     }
   };
 }
-function starLine(r) { return "★".repeat(Math.floor(r)) + (r % 1 >= 0.5 ? "☆" : ""); }
 function badge(t, c) { return '<span class="mini-badge ' + c + '">' + t + '</span>'; }
 
 function render() {
@@ -238,13 +225,14 @@ function render() {
   const f = getFilters();
   const list = PROVIDERS.filter(p => passes(p, f)).sort(sorter(sortEl.value));
   if (!list.length) { listEl.innerHTML = '<div class="empty">No providers match these filters. Try loosening one.</div>'; metaInfo.textContent = "0 of " + PROVIDERS.length + " providers shown."; return; }
-  metaInfo.textContent = "Showing " + list.length + " providers · Best rates first";
-  const topEff = effectiveINR(list[0]);
-  if (topEff && widgetReceive) { widgetReceive.textContent = fmtPlain((parseFloat(hkdEl.value) || 0) * topEff.rate, 2); widgetBestVia.textContent = "Best via " + list[0].name; }
+  metaInfo.textContent = "Showing " + list.length + " providers · Best rates first, unverified figures last";
+  const bestP = list.find(p => p.last_verified); // never crown an unverified (indicative) provider
+  const topEff = bestP ? effectiveINR(bestP) : null;
+  if (topEff && widgetReceive) { widgetReceive.textContent = fmtPlain((parseFloat(hkdEl.value) || 0) * topEff.rate, 2); widgetBestVia.textContent = "Best via " + bestP.name; }
   listEl.innerHTML = list.map((p, idx) => {
     const eff = effectiveINR(p);
     const isLive = eff && eff.live_source === "api";
-    const isBest = idx === 0 && sortEl.value === "rate";
+    const isBest = bestP && p.id === bestP.id && sortEl.value === "rate";
     const miniBadges = [
       p.iam_smart ? badge("iAM Smart", "") : null,
       p.nre ? badge("NRE", "") : null,
@@ -256,8 +244,8 @@ function render() {
     const feeDisplay = (eff && eff.flat === 0) ? '<span class="col-value fee-zero">ZERO</span>' : '<span class="col-value">HK$' + (eff ? eff.flat : p.fee_flat_hkd) + '</span>';
     const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Go to Site <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' : '<span class="go-btn ghost">Existing customers only</span>';
     const verifiedText = p.last_verified === null ? 'Needs verification' : 'Last verified ' + p.last_verified;
-    const footBlock = isLive ? '<span class="live-marker">Live rate · fetched just now</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">Indicative</span><span class="show-methods">' + verifiedText + '</span>';
-    return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating"><span class="stars">' + starLine(p.rating) + '</span>(' + p.reviews.toLocaleString('en') + ')</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div></article>';
+    const footBlock = isLive ? '<span class="live-marker">Live rate · updated hourly</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">Indicative</span><span class="show-methods">' + verifiedText + '</span>';
+    return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div></article>';
   }).join("");
 }
 
