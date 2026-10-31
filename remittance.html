@@ -133,14 +133,13 @@
     <div class="brand">
       <div class="footer-logo"><img src="assets/logo.png" alt="nriremit"></div>
       <p>Honest HKD → INR remittance comparison for Hong Kong NRIs.</p>
-      <div class="social"><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="Instagram">◉</a><a href="#" aria-label="LinkedIn">in</a></div>
     </div>
     <div><h5>Compare</h5><ul><li><a href="remittance.html">HKD → INR</a></li><li><a href="remittance.html">All providers</a></li></ul></div>
     <div><h5>Learn</h5><ul><li><a href="guides.html">Compliance guides</a></li><li><a href="myths.html">Myths &amp; Facts</a></li></ul></div>
     <div><h5>Columns</h5><ul><li><a href="india-beat.html">India Beat</a></li><li><a href="leftover-citizen.html">The Leftover Citizen</a></li><li><a href="mailto:hello@nriremit.com">Email us</a></li></ul></div>
     <div><h5>About</h5><ul><li><a href="about.html">About nriremit</a></li><li><a href="methodology.html">Methodology</a></li><li><a href="methodology.html#money">How we make money</a></li><li><a href="contact.html">Contact</a></li></ul></div>
   </div>
-  <div class="copyright"><span>© 2026 nriremit.</span><div class="links"><a href="#">Privacy</a><a href="#">Terms</a></div></div>
+  <div class="copyright"><span>© 2026 nriremit.</span><div class="links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
 </footer>
 
 <script src="assets/midrate.js"></script>
@@ -244,7 +243,7 @@ function render() {
     const feeDisplay = (eff && eff.flat === 0) ? '<span class="col-value fee-zero">ZERO</span>' : '<span class="col-value">HK$' + (eff ? eff.flat : p.fee_flat_hkd) + '</span>';
     const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Go to Site <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' : '<span class="go-btn ghost">Existing customers only</span>';
     const verifiedText = p.last_verified === null ? 'Needs verification' : 'Last verified ' + p.last_verified;
-    const footBlock = isLive ? '<span class="live-marker">Live rate · updated hourly</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">Indicative</span><span class="show-methods">' + verifiedText + '</span>';
+    const footBlock = isLive ? '<span class="live-marker">Live rate · updated hourly</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">' + (p.last_verified ? 'Checked manually' : 'Indicative') + '</span><span class="show-methods">' + verifiedText + '</span>';
     return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div></article>';
   }).join("");
 }
