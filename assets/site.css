@@ -566,7 +566,7 @@ section { margin-bottom: 72px; }
 
 /* FOOTER */
 footer.site { background: var(--dark); color: #fff; margin-top: 100px; padding: 72px 20px 32px; }
-footer.site .inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; }
+footer.site .inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; gap: 36px; }
 footer.site .brand { max-width: 320px; }
 footer.site .footer-logo { background: #fff; padding: 10px 14px; border-radius: var(--radius-pill); display: inline-block; margin-bottom: 16px; }
 footer.site .footer-logo img { height: 36px; width: auto; display: block; }
@@ -638,3 +638,15 @@ footer.site .copyright a:hover { color: #fff; }
   .features-with-strip { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); grid-auto-rows: auto; }
   .citizen-sidebar { min-height: 340px; grid-column: auto; grid-row: auto; }
 }
+
+/* LEGAL / PROSE PAGES */
+.legal { max-width: 760px; margin: 0 0 80px; }
+.legal h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; color: var(--dark); margin: 36px 0 10px; scroll-margin-top: 110px; }
+.legal p, .legal li { font-size: 16px; line-height: 1.7; color: var(--ink-soft); }
+.legal p { margin: 0 0 14px; }
+.legal ul { margin: 0 0 14px; padding-left: 22px; }
+.legal li { margin-bottom: 8px; }
+.legal strong { color: var(--ink); font-weight: 600; }
+.legal a { color: var(--brand-strong); text-decoration: underline; text-underline-offset: 2px; }
+.legal .updated { font-size: 13px; color: var(--ink-faint); margin: 0 0 4px; }
+.legal .formula { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px 18px; font-weight: 600; color: var(--dark); font-size: 15px; }
