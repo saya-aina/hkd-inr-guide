@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-01T21:28:13Z",
+  "updated_at": "2026-11-01T22:27:46Z",
   "mid_market_rate": 12.1102,
   "reference_amount_hkd": 10000,
   "providers": [
     {
       "id": "wise",
       "fee_flat_hkd": 60.59,
-      "fx_margin_pct": 0.06,
+      "fx_margin_pct": 0.08,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-01T21:28:13Z"
+      "fetched_at": "2026-11-01T22:27:46Z"
     },
     {
       "id": "instarem",
