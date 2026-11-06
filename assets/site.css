@@ -676,6 +676,6 @@ footer.site .copyright a:hover { color: #fff; }
 .strip-section{max-width:1160px;margin:0 auto 48px;padding:0 20px}
 .strip-section .over{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#b45309;margin:0 0 6px}
 .strip-section h2{margin:0 0 16px}
-.strip-section .archive-head{margin:36px 0 14px;font-size:18px}
+.strip-section .archive-head{margin:8px 0 14px;font-size:18px}
 .strip-archive{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .strip-archive .cartoon{margin:0}
