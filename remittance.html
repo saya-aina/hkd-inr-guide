@@ -108,6 +108,7 @@
       <div><h2>Top Recommendations</h2><p class="meta" id="providerMeta">Loading…</p></div>
       <div class="sort">Sort by: <select id="sort"><option value="rate">Best Value</option><option value="speed">Fastest</option><option value="fee">Lowest fee</option><option value="name">Name A–Z</option></select></div>
     </div>
+    <p class="pay-note"><strong>Bank transfer / FPS prices.</strong> Paying by debit or credit card is usually much dearer (Wise was about 4.8% at HK$10,000 on 7 Nov, against about 0.6% by bank transfer). New-customer offers are not used for ranking.</p>
     <div id="providers" class="providers"></div>
   </div>
   <aside class="side">
@@ -146,11 +147,12 @@
 <script>
 const PROVIDERS = [
   // ===== Fintechs — verified from provider sites on 2026-10-31 (HKD 10,000 → INR) =====
-  { id: "wise", name: "Wise", host: "wise.com", avatar: "W", fee_flat_hkd: 60, fx_margin_pct: 0.00, delivery_minutes: 1, delivery_label: "Seconds", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://wise.com/invite/", last_verified: "2026-10-31" },
-  { id: "instarem", name: "Instarem", host: "instarem.com", avatar: "I", fee_flat_hkd: 59, fx_margin_pct: 0.09, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.instarem.com/", last_verified: "2026-10-31" },
-  { id: "wu", name: "Western Union", host: "westernunion.com", avatar: "W", fee_flat_hkd: 5, fx_margin_pct: 0.29, delivery_minutes: 1, delivery_label: "Real-time", max_single_transfer_hkd: 15000, high_value_friendly: false, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.westernunion.com/", last_verified: "2026-10-31" },
-  { id: "panda", name: "Panda Remit", host: "pandaremit.com", avatar: "P", fee_flat_hkd: 100, fx_margin_pct: 0.48, delivery_minutes: 120, delivery_label: "2 Hrs", max_single_transfer_hkd: 100000, high_value_friendly: false, iam_smart: false, nre: true, firc: false, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.pandaremit.com/", last_verified: "2026-10-31" },
-  { id: "mg", name: "MoneyGram", host: "moneygram.com", avatar: "M", fee_flat_hkd: 8, fx_margin_pct: 0.99, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 1500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.moneygram.com/", last_verified: "2026-10-31" },
+  { id: "wise", name: "Wise", host: "wise.com", avatar: "W", fee_flat_hkd: 60.61, fee_curve: [[1000, 13.16], [10000, 60.61], [50000, 271.49]], fee_note: "Fee scales with the amount (about 1.3% at HK$1,000, 0.6% at 10,000, 0.5% at 50,000). Mid-market rate. Bank transfer or FPS; paying by debit card costs far more (about 4.8% at HK$10,000).", fx_margin_pct: 0.00, delivery_minutes: 1, delivery_label: "Seconds", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://wise.com/invite/", last_verified: "2026-11-07" },
+  { id: "instarem", name: "Instarem", host: "instarem.com", avatar: "I", fee_flat_hkd: 59, fee_pct: 0.59, aff: true, fee_note: "Fee is 0.59% of the amount sent (bank transfer, checked 4 and 7 Nov 2026). A first-transfer fee waiver may apply; it is not included in these figures. Debit card carries a higher fee.", fx_margin_pct: 0.08, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://instarem.prf.hn/click/camref:1110lSAw4", last_verified: "2026-11-07" },
+  { id: "wu", name: "Western Union", host: "westernunion.com", avatar: "W", fee_flat_hkd: 5, fx_margin_pct: 0.10, fee_note: "Indicative only. The quote we saw on 7 Nov was a new-customer offer (fee waived, better rate at small amounts), so we cannot confirm the standard price. Standard fee appears to be about HK$5.", delivery_minutes: 1, delivery_label: "Real-time", max_single_transfer_hkd: 15000, high_value_friendly: false, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.westernunion.com/", last_verified: null },
+  { id: "panda", name: "Panda Remit", host: "pandaremit.com", avatar: "P", fee_flat_hkd: 100, fx_margin_pct: 0.42, fee_note: "Indicative only. Panda Remit shows rates and fees only to new customers (promo pricing), so we cannot confirm the standard price. Standard fee appears to be about HK$100.", delivery_minutes: 120, delivery_label: "2 Hrs", max_single_transfer_hkd: 100000, high_value_friendly: false, iam_smart: false, nre: true, firc: false, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.pandaremit.com/", last_verified: null },
+  { id: "ofx", name: "OFX", host: "ofx.com", avatar: "O", fee_flat_hkd: 60, fee_steps: [[0, 60], [50000, 0]], margin_curve: [[1000, 4.32], [10000, 3.65], [50000, 3.17]], fee_note: "HK$60 fee below HK$50,000, none above. The rate is 3–4% below mid-market, much worse than the fintechs (checked 7 Nov 2026, bank transfer).", fx_margin_pct: 3.65, delivery_minutes: 1440, delivery_label: "1–2 Days", max_single_transfer_hkd: 1000000, high_value_friendly: true, iam_smart: false, nre: true, firc: false, weekend_processing: false, instant_imps: false, affiliate_url: "https://www.ofx.com/", last_verified: "2026-11-07" },
+  { id: "mg", name: "MoneyGram", host: "moneygram.com", avatar: "M", fee_flat_hkd: 8, fx_margin_pct: 1.07, fee_note: "Flat HK$8 fee. Rate is about 1.1% below mid-market (checked 7 Nov 2026, bank transfer).", delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 1500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: "https://www.moneygram.com/", last_verified: "2026-11-07" },
   // ===== Indian bank NRI remittance services — INDICATIVE (needs manual verification) =====
   { id: "aspora", name: "Aspora", host: "aspora.com", avatar: "A", fee_flat_hkd: 0, fx_margin_pct: 0.30, delivery_minutes: 60, delivery_label: "1 Hr", max_single_transfer_hkd: 2000000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: true, instant_imps: true, affiliate_url: null, last_verified: null },
   { id: "axisremit", name: "Axis Remit", host: "axisbank.com", avatar: "A", fee_flat_hkd: 0, fx_margin_pct: 0.60, delivery_minutes: 1440, delivery_label: "1 Day", max_single_transfer_hkd: 2500000, high_value_friendly: true, iam_smart: false, nre: true, firc: true, weekend_processing: false, instant_imps: false, affiliate_url: null, last_verified: null },
@@ -174,6 +176,28 @@ let liveOverrides = {};
 
 function fmtINR(n, d) { d = d || 2; return !isFinite(n) ? "—" : "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: d, minimumFractionDigits: d }); }
 function fmtPlain(n, d) { d = d || 2; return !isFinite(n) ? "—" : n.toLocaleString("en-IN", { maximumFractionDigits: d, minimumFractionDigits: d }); }
+function fmtFee(n) { return "HK$" + (Number.isInteger(n) ? n : n.toFixed(2)); }
+function interpClamp(c, x) {
+  const n = c.length;
+  if (x <= c[0][0]) return c[0][1];
+  for (let i = 1; i < n; i++) if (x <= c[i][0]) return c[i-1][1] + (x - c[i-1][0]) * (c[i][1] - c[i-1][1]) / (c[i][0] - c[i-1][0]);
+  return c[n-1][1];
+}
+function marginFor(p, hkd) { return p.margin_curve ? +interpClamp(p.margin_curve, hkd).toFixed(2) : p.fx_margin_pct; }
+function feeFor(p, hkd) {
+  if (p.fee_steps) { let f = p.fee_steps[0][1]; p.fee_steps.forEach(st => { if (hkd >= st[0]) f = st[1]; }); return f; }
+  if (p.fee_curve) {
+    const c = p.fee_curve, n = c.length;
+    if (hkd <= c[0][0]) return +(c[0][1] * hkd / c[0][0]).toFixed(2);
+    for (let i = 1; i < n; i++) {
+      if (hkd <= c[i][0]) return +(c[i-1][1] + (hkd - c[i-1][0]) * (c[i][1] - c[i-1][1]) / (c[i][0] - c[i-1][0])).toFixed(2);
+    }
+    const slope = (c[n-1][1] - c[n-2][1]) / (c[n-1][0] - c[n-2][0]);
+    return +(c[n-1][1] + (hkd - c[n-1][0]) * slope).toFixed(2);
+  }
+  if (p.fee_pct != null) return +(hkd * p.fee_pct / 100).toFixed(2);
+  return p.fee_flat_hkd;
+}
 function fmtRate(n) { return n.toLocaleString("en-IN", { minimumFractionDigits: 4, maximumFractionDigits: 4 }); }
 
 async function loadLiveOverrides() {
@@ -201,8 +225,9 @@ function effectiveINR(p) {
   const midRate = window.__midRate;
   if (!midRate || !hkd) return null;
   const live = liveOverrides[p.id] || {};
-  const flat = live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd;
-  const margin = live.fx_margin_pct != null ? live.fx_margin_pct : p.fx_margin_pct;
+  const scaled = !!(p.fee_curve || p.fee_pct != null || p.fee_steps);
+  const flat = scaled ? feeFor(p, hkd) : (live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd);
+  const margin = p.margin_curve ? marginFor(p, hkd) : (live.fx_margin_pct != null ? live.fx_margin_pct : p.fx_margin_pct);
   return { net_inr: Math.max(0, hkd - flat) * midRate * (1 - margin / 100), rate: midRate * (1 - margin / 100), flat, margin, live_source: live.source };
 }
 function sorter(mode) {
@@ -210,7 +235,8 @@ function sorter(mode) {
     const ea = effectiveINR(a), eb = effectiveINR(b);
     switch (mode) {
       case "speed": return a.delivery_minutes - b.delivery_minutes;
-      case "fee": return a.fee_flat_hkd - b.fee_flat_hkd;
+      case "fee": if (!!a.last_verified !== !!b.last_verified) return a.last_verified ? -1 : 1;
+        return (ea ? ea.flat : a.fee_flat_hkd) - (eb ? eb.flat : b.fee_flat_hkd);
       case "name": return a.name.localeCompare(b.name);
       default: if (!!a.last_verified !== !!b.last_verified) return a.last_verified ? -1 : 1; // verified/live first, unverified last
         if (!ea || !eb) return 0; return eb.net_inr - ea.net_inr;
@@ -224,7 +250,7 @@ function render() {
   const f = getFilters();
   const list = PROVIDERS.filter(p => passes(p, f)).sort(sorter(sortEl.value));
   if (!list.length) { listEl.innerHTML = '<div class="empty">No providers match these filters. Try loosening one.</div>'; metaInfo.textContent = "0 of " + PROVIDERS.length + " providers shown."; return; }
-  metaInfo.textContent = "Showing " + list.length + " providers · Best rates first, unverified figures last";
+  metaInfo.textContent = "Showing " + list.length + " providers · Checked providers ranked first; indicative figures last and never crowned";
   const bestP = list.find(p => p.last_verified); // never crown an unverified (indicative) provider
   const topEff = bestP ? effectiveINR(bestP) : null;
   if (topEff && widgetReceive) { widgetReceive.textContent = fmtPlain((parseFloat(hkdEl.value) || 0) * topEff.rate, 2); widgetBestVia.textContent = "Best via " + bestP.name; }
@@ -240,11 +266,11 @@ function render() {
       p.instant_imps ? badge("Instant IMPS", "") : badge("Batched", "neutral"),
       p.high_value_friendly ? null : badge("Not for >HKD 120k", "warn")
     ].filter(Boolean).join("");
-    const feeDisplay = (eff && eff.flat === 0) ? '<span class="col-value fee-zero">ZERO</span>' : '<span class="col-value">HK$' + (eff ? eff.flat : p.fee_flat_hkd) + '</span>';
-    const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Go to Site <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' : '<span class="go-btn ghost">Existing customers only</span>';
+    const feeDisplay = (eff && eff.flat === 0) ? '<span class="col-value fee-zero">ZERO</span>' : '<span class="col-value">' + fmtFee(eff ? eff.flat : p.fee_flat_hkd) + '</span>';
+    const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Go to Site <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' + (p.aff ? '<span class="aff-note">Affiliate link</span>' : '') : '<span class="go-btn ghost">Existing customers only</span>';
     const verifiedText = p.last_verified === null ? 'Needs verification' : 'Last verified ' + p.last_verified;
-    const footBlock = isLive ? '<span class="live-marker">Live rate · updated hourly</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">' + (p.last_verified ? 'Checked manually' : 'Indicative') + '</span><span class="show-methods">' + verifiedText + '</span>';
-    return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div></article>';
+    const footBlock = isLive ? '<span class="live-marker">Live rate · updated hourly</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">' + (p.last_verified ? 'Checked manually' : 'Indicative · not ranked') + '</span><span class="show-methods">' + verifiedText + '</span>';
+    return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div>' + (p.fee_note ? '<p class="prov-note">' + p.fee_note + '</p>' : '') + '</article>';
   }).join("");
 }
 
