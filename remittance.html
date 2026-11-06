@@ -224,8 +224,9 @@ function effectiveINR(p) {
   const hkd = parseFloat(hkdEl.value) || 0;
   const midRate = window.__midRate;
   if (!midRate || !hkd) return null;
-  const live = liveOverrides[p.id] || {};
   const scaled = !!(p.fee_curve || p.fee_pct != null || p.fee_steps);
+  // Amount-based providers use our checked fee/margin model; the hourly feed is a single 10k snapshot and its margin is distorted by a different mid-market source.
+  const live = scaled ? {} : (liveOverrides[p.id] || {});
   const flat = scaled ? feeFor(p, hkd) : (live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd);
   const margin = p.margin_curve ? marginFor(p, hkd) : (live.fx_margin_pct != null ? live.fx_margin_pct : p.fx_margin_pct);
   return { net_inr: Math.max(0, hkd - flat) * midRate * (1 - margin / 100), rate: midRate * (1 - margin / 100), flat, margin, live_source: live.source };
