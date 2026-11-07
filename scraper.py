@@ -109,8 +109,10 @@ def fetch_wise_quote(mid: float) -> dict[str, Any] | None:
             print("[wise] fee/rate missing in quote", file=sys.stderr)
             return None
 
-        fx_margin_pct = (mid - float(rate)) / mid * 100
-        fx_margin_pct = max(0.0, round(fx_margin_pct, 2))
+        # Wise's quoted rate is its mid-market rate with no markup (checked 7 Nov 2026),
+        # so its cost is the fee alone. Measuring the gap against currency-api's mid
+        # gave a spurious ~0.5% margin, so we pin it to 0.
+        fx_margin_pct = 0.0
 
         return {
             "fee_flat_hkd": round(float(fee), 2),
