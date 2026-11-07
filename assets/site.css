@@ -679,3 +679,6 @@ footer.site .copyright a:hover { color: #fff; }
 .strip-section .archive-head{margin:8px 0 14px;font-size:18px}
 .strip-archive{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .strip-archive .cartoon{margin:0}
+
+.widget-amount{font:inherit;font-size:30px;font-weight:700;color:var(--dark);letter-spacing:-0.02em;border:0;background:transparent;width:100%;padding:0;outline:none;min-height:36px}
+.widget-amount:focus{box-shadow:0 0 0 2px var(--brand-highlight);border-radius:6px}
