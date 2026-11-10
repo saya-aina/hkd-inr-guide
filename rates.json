@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T15:26:12Z",
-  "mid_market_rate": 11.971735,
+  "updated_at": "2026-11-10T21:40:36Z",
+  "mid_market_rate": 11.936259,
   "reference_amount_hkd": 10000,
   "providers": [
     {
@@ -10,7 +10,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-10T15:26:12Z"
+      "fetched_at": "2026-11-10T21:40:36Z"
     },
     {
       "id": "instarem",
