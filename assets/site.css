@@ -682,3 +682,8 @@ footer.site .copyright a:hover { color: #fff; }
 
 .widget-amount{font:inherit;font-size:30px;font-weight:700;color:var(--dark);letter-spacing:-0.02em;border:0;background:transparent;width:100%;padding:0;outline:none;min-height:36px}
 .widget-amount:focus{box-shadow:0 0 0 2px var(--brand-highlight);border-radius:6px}
+
+/* Collapsed group for bank NRI services (account holders only) */
+.bank-group { margin-top: 16px; }
+.bank-group > summary { cursor: pointer; padding: 14px 18px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+.bank-group[open] > summary { margin-bottom: 12px; }
