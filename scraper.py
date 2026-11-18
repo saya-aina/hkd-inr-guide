@@ -129,11 +129,86 @@ def fetch_wise_quote(mid: float) -> dict[str, Any] | None:
 
 
 # ---------------------------------------------------------------------------
+# Instarem public retail API (shared by Instarem's partnerships team, 17 Nov 2026)
+# ---------------------------------------------------------------------------
+
+INSTAREM_BASE = "https://www.instarem.com/api/v1/public"
+UA = {"User-Agent": "hkd-inr-comparison/1.0 (informational directory)"}
+
+
+def fetch_instarem_quote(mid: float) -> dict[str, Any] | None:
+    """
+    Two calls: payment-method (to find the bank-transfer key), then
+    computed-value for HKD 10,000. Uses the REGULAR (non-promo) fee percent, and
+    derives the FX margin against the mid-market rate. Returns None on any
+    surprise so the site falls back to its curated figures.
+    """
+    try:
+        r = requests.get(
+            f"{INSTAREM_BASE}/payment-method/fee",
+            params={
+                "source_currency": "HKD",
+                "source_amount": AMOUNT_HKD,
+                "destination_currency": "INR",
+            },
+            timeout=TIMEOUT, headers=UA,
+        )
+        r.raise_for_status()
+        methods = (r.json() or {}).get("data") or []
+        bank = next(
+            (m for m in methods
+             if not m.get("is_pg") and "bank" in (m.get("text") or "").lower()),
+            None,
+        ) or next((m for m in methods if not m.get("is_pg")), None)
+        if not bank or bank.get("key") is None:
+            print("[instarem] no bank-transfer payment method found", file=sys.stderr)
+            return None
+
+        r = requests.get(
+            f"{INSTAREM_BASE}/transaction/computed-value",
+            params={
+                "device": "web",
+                "source_currency": "HKD",
+                "destination_currency": "INR",
+                "instarem_bank_account_id": bank["key"],
+                "source_amount": AMOUNT_HKD,
+            },
+            timeout=TIMEOUT, headers=UA,
+        )
+        r.raise_for_status()
+        data = (r.json() or {}).get("data") or {}
+        cfg = data.get("transaction_config") or {}
+        fx = data.get("instarem_fx_rate") or data.get("fx_rate") or cfg.get("fx_rate")
+        fee_pct = cfg.get("regular_total_fee_percent")
+        if fee_pct is None:
+            fee_pct = cfg.get("total_fee_percent")
+        if not fx or fee_pct is None:
+            print("[instarem] fx_rate or fee percent missing", file=sys.stderr)
+            return None
+        fx, fee_pct = float(fx), float(fee_pct)
+        margin = (1 - fx / mid) * 100
+        # Sanity bounds: a bad parse should never reach the site.
+        if not (0 <= fee_pct <= 3) or not (-0.5 <= margin <= 3):
+            print(f"[instarem] implausible fee {fee_pct}% or margin {margin:.2f}%", file=sys.stderr)
+            return None
+        return {
+            "fee_pct": round(fee_pct, 3),
+            "fx_margin_pct": round(max(margin, 0.0), 3),
+            "reference_amount_hkd": AMOUNT_HKD,
+            "source": "api",
+            "fetched_at": iso_now(),
+        }
+    except Exception as e:
+        print(f"[instarem] failed: {e}", file=sys.stderr)
+        return None
+
+
+# ---------------------------------------------------------------------------
 # Curated-only providers
 # ---------------------------------------------------------------------------
 
 CURATED_ONLY = [
-    "instarem", "panda", "remitly", "orbitremit", "xe",
+    "panda", "remitly", "orbitremit", "xe",
     "wu", "mg", "hsbc", "dbs", "bochk",
 ]
 
@@ -175,6 +250,12 @@ def main() -> int:
             {"id": "wise", "source": "unavailable", "fetched_at": iso_now()}
         )
 
+    inst = fetch_instarem_quote(mid)
+    providers.append(
+        {"id": "instarem", **inst} if inst
+        else {"id": "instarem", "source": "unavailable", "fetched_at": iso_now()}
+    )
+
     for pid in CURATED_ONLY:
         providers.append({"id": pid, "source": "curated"})
 
@@ -194,7 +275,7 @@ def main() -> int:
     }
 
     OUT_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {OUT_PATH} - mid={mid:.4f} - wise={'ok' if wise else 'failed'}")
+    print(f"Wrote {OUT_PATH} - mid={mid:.4f} - wise={'ok' if wise else 'failed'} - instarem={'ok' if inst else 'failed'}")
     return 0
 
 
