@@ -2,8 +2,9 @@
 HKD to INR remittance rate scraper.
 
 Writes rates.json with:
-  - mid_market_rate: live, from fawazahmed0/currency-api via jsDelivr CDN
-    (free, keyless, CORS-enabled, updated daily)
+  - mid_market_rate: Wise's quoted rate (its mid-market rate, no markup) when
+    the Wise comparison call works; otherwise fawazahmed0/currency-api via
+    jsDelivr (free, keyless, updated daily). mid_source says which one.
   - providers[].fee_flat_hkd / fx_margin_pct: live for providers with
     public APIs; omitted for the rest so the frontend falls back to curated
     values in index.html.
@@ -115,6 +116,7 @@ def fetch_wise_quote(mid: float) -> dict[str, Any] | None:
         fx_margin_pct = 0.0
 
         return {
+            "_rate": float(rate),
             "fee_flat_hkd": round(float(fee), 2),
             "fx_margin_pct": fx_margin_pct,
             "reference_amount_hkd": AMOUNT_HKD,
@@ -141,7 +143,24 @@ CURATED_ONLY = [
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    mid = fetch_mid_market()
+    feed_mid = fetch_mid_market()
+
+    providers: list[dict[str, Any]] = []
+
+    wise = fetch_wise_quote(feed_mid or 0.0)
+    wise_rate = wise.pop("_rate", None) if wise else None
+
+    # Prefer Wise's own rate: it is the mid-market rate and fresher than the
+    # daily feed. Sanity check it against the feed (within 1%) when we have both.
+    mid, mid_source = feed_mid, "currency-api"
+    if wise_rate and wise_rate > 0:
+        if feed_mid is None or abs(wise_rate / feed_mid - 1) <= 0.01:
+            mid, mid_source = wise_rate, "wise"
+        else:
+            print(
+                f"[mid-market] Wise rate {wise_rate} differs >1% from feed {feed_mid}; using feed",
+                file=sys.stderr,
+            )
     if mid is None:
         print(
             "No mid-market rate; refusing to write rates.json with stale data.",
@@ -149,9 +168,6 @@ def main() -> int:
         )
         return 1
 
-    providers: list[dict[str, Any]] = []
-
-    wise = fetch_wise_quote(mid)
     if wise:
         providers.append({"id": "wise", **wise})
     else:
@@ -166,6 +182,7 @@ def main() -> int:
         "schema_version": 1,
         "updated_at": iso_now(),
         "mid_market_rate": round(mid, 6),
+        "mid_source": mid_source,
         "reference_amount_hkd": AMOUNT_HKD,
         "providers": providers,
         "note": (
