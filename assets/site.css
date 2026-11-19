@@ -694,3 +694,15 @@ footer.site .copyright a:hover { color: #fff; }
 .nav-items a.active .ni, .nav-items a:hover .ni { opacity: 1; }
 .nav-items a.active::after { bottom: 3px; }
 em.slant, .slant { font-style: italic; }
+
+.snapshot { margin-bottom: 18px; }
+.snap-box { background: var(--surface-soft); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px 18px; }
+.snap-box h3 { margin: 0 0 8px; font-size: 16px; }
+.snap-box ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+.snap-more { margin-top: 10px; }
+.snap-more > summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--brand); }
+.snap-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+.snap-table th, .snap-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+.snap-table td:last-child, .snap-table th:last-child { text-align: right; }
+.snap-foot { font-size: 12px; color: var(--ink-faint); margin: 8px 0 0; }
+@media (max-width: 640px) { .snap-table { display: block; overflow-x: auto; } }

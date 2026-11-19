@@ -113,6 +113,7 @@
       <div class="sort">Sort by: <select id="sort"><option value="rate">Best Value</option><option value="speed">Fastest</option><option value="fee">Lowest fee</option><option value="name">Name A–Z</option></select></div>
     </div>
     <p class="pay-note"><strong>Bank transfer / FPS prices.</strong> Paying by debit or credit card is usually much dearer (Wise was about 4.8% at HK$10,000 on 7 Nov, against about 0.6% by bank transfer). New-customer offers are not used for ranking.</p>
+    <div id="snapshot" class="snapshot"></div>
     <div id="providers" class="providers"></div>
   </div>
   <aside class="side">
@@ -252,6 +253,33 @@ function sorter(mode) {
 }
 function badge(t, c) { return '<span class="mini-badge ' + c + '">' + t + '</span>'; }
 
+
+function renderSnapshot(list) {
+  const el = document.getElementById("snapshot");
+  const hkd = parseFloat(hkdEl.value) || 0;
+  const rows = list.filter(p => p.last_verified).map(p => ({ p: p, e: effectiveINR(p) })).filter(r => r.e);
+  if (!rows.length || !hkd) { el.innerHTML = ""; return; }
+  const byNet = rows.slice().sort((a, b) => b.e.net_inr - a.e.net_inr);
+  const byRate = rows.slice().sort((a, b) => b.e.rate - a.e.rate);
+  const best = byNet[0], worst = byNet[byNet.length - 1], br = byRate[0];
+  const zero = rows.filter(r => r.e.flat === 0).length;
+  const mid = window.__midRate;
+  const open = el.querySelector("details") && el.querySelector("details").open;
+  const li = (k, v) => '<li><strong>' + k + '</strong> ' + v + '</li>';
+  const table = '<table class="snap-table"><thead><tr><th>Provider</th><th>Rate</th><th>Fee</th><th>Speed</th><th>Recipient gets</th></tr></thead><tbody>' +
+    byNet.map(r => '<tr><td>' + r.p.name + '</td><td>' + fmtRate(r.e.rate) + '</td><td>' + (r.e.flat === 0 ? "Zero" : fmtFee(r.e.flat)) + '</td><td>' + (r.p.delivery_label || "") + '</td><td>' + fmtINR(r.e.net_inr) + '</td></tr>').join("") +
+    '</tbody></table><p class="snap-foot">Checked providers only. Banks and unverified providers are shown below as indicative.</p>';
+  el.innerHTML = '<div class="snap-box"><h3>HKD to INR snapshot today</h3><ul>' +
+    li("Most INR received for HK$" + hkd.toLocaleString("en-IN") + ":", fmtINR(best.e.net_inr) + " with " + best.p.name) +
+    li("Best HKD to INR rate today:", fmtRate(br.e.rate) + ", offered by " + br.p.name) +
+    li("Providers compared:", rows.length + " checked") +
+    li("Exchange rate range:", fmtRate(byRate[byRate.length - 1].e.rate) + " to " + fmtRate(br.e.rate)) +
+    li("Potential savings on HK$" + hkd.toLocaleString("en-IN") + ":", "up to " + fmtINR(best.e.net_inr - worst.e.net_inr) + ", fees included") +
+    li("Zero-fee transfers:", zero + " of " + rows.length + " providers") +
+    li("Mid-market rate:", "1 HKD = INR " + fmtRate(mid)) +
+    '</ul><details' + (open ? ' open' : '') + ' class="snap-more"><summary>View table</summary>' + table + '</details></div>';
+}
+
 function render() {
   if (!window.__midRate) { metaInfo.textContent = "Loading rates…"; return; }
   const f = getFilters();
@@ -261,6 +289,7 @@ function render() {
   const bestP = list.find(p => p.last_verified); // never crown an unverified (indicative) provider
   const topEff = bestP ? effectiveINR(bestP) : null;
   if (topEff && widgetReceive) { widgetReceive.textContent = fmtPlain((parseFloat(hkdEl.value) || 0) * topEff.rate, 2); widgetBestVia.textContent = "Best via " + bestP.name; }
+  renderSnapshot(list);
   const card = (p, idx) => {
     const eff = effectiveINR(p);
     const isLive = eff && eff.live_source === "api";
@@ -274,7 +303,7 @@ function render() {
       p.high_value_friendly ? null : badge("Not for >HKD 120k", "warn")
     ].filter(Boolean).join("");
     const feeDisplay = (eff && eff.flat === 0) ? '<span class="col-value fee-zero">ZERO</span>' : '<span class="col-value">' + fmtFee(eff ? eff.flat : p.fee_flat_hkd) + '</span>';
-    const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Go to Site <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' + (p.aff ? '<span class="aff-note">Affiliate link</span>' : '') + (p.cta_note ? '<span class="aff-note">' + p.cta_note + '</span>' : '') : '<span class="go-btn ghost">Existing customers only</span>';
+    const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Send money now <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' + (p.aff ? '<span class="aff-note">Affiliate link</span>' : '') + (p.cta_note ? '<span class="aff-note">' + p.cta_note + '</span>' : '') : '<span class="go-btn ghost">Existing customers only</span>';
     const verifiedText = p.last_verified === null ? 'Needs verification' : 'Last verified ' + p.last_verified;
     const footBlock = isLive ? '<span class="live-marker">Live rate · updated hourly</span><span class="show-methods">Verified ' + p.last_verified + '</span>' : '<span class="indic">' + (p.last_verified ? 'Checked manually' : 'Indicative · not ranked') + '</span><span class="show-methods">' + verifiedText + '</span>';
     return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div>' + (p.fee_note ? '<p class="prov-note">' + p.fee_note + '</p>' : '') + '</article>';
