@@ -45,7 +45,7 @@
     <button type="submit" class="go-btn">Create free alert</button>
     <p id="alertMsg" class="alert-msg" role="status"></p>
   </form>
-  <p class="alert-fine">Rates are indicative and not a quote. We may earn a commission if you send money through a link in the email, at no cost to you. Emails are sent about 7:00 am IST.</p>
+  <p class="alert-fine">After you sign up we send a confirmation email from hello@nriremit.com. It sometimes lands in Spam or Promotions, so please check there and click the link to confirm. Rates are indicative and not a quote. We may earn a commission if you send money through a link in the email, at no cost to you. Emails are sent about 7:00 am IST.</p>
 </main>
 </div>
 <script>
@@ -60,7 +60,7 @@ f.addEventListener("submit", async e => {
   msg.textContent = "Sending…";
   try {
     await fetch(BREVO_FORM_URL, { method: "POST", mode: "no-cors", body: new FormData(f) });
-    msg.textContent = "Almost done: check your inbox and confirm your email to start the alerts.";
+    msg.textContent = "Almost done: check your inbox and confirm your email to start the alerts. If it is not there in a few minutes, check your Spam or Promotions folder.";
     f.reset();
   } catch (err) { msg.textContent = "Something went wrong. Please try again."; }
 });
