@@ -60,5 +60,5 @@ function effectiveINR(p, hkdIn) {
   const live = scaled ? {} : (liveOverrides[p.id] || {});
   const flat = iOk ? +(hkd * iLive.fee_pct / 100).toFixed(2) : (scaled ? feeFor(p, hkd) : (live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd));
   const margin = iOk ? iLive.fx_margin_pct : (p.margin_curve ? marginFor(p, hkd) : (live.fx_margin_pct != null ? live.fx_margin_pct : p.fx_margin_pct));
-  return { net_inr: Math.max(0, hkd - flat) * midRate * (1 - margin / 100), rate: midRate * (1 - margin / 100), flat, margin, live_source: iOk ? "api" : live.source };
+  return { net_inr: Math.max(0, hkd - flat) * midRate * (1 - margin / 100), rate: midRate * (1 - margin / 100), flat, margin, live_source: iOk ? "api" : live.source, live_at: iOk ? iLive.fetched_at : null };
 }
