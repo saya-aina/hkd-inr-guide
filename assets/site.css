@@ -717,3 +717,7 @@ em.slant, .slant { font-style: italic; }
 .alert-form button:disabled { opacity: .5; cursor: not-allowed; }
 .alert-msg { font-size: 14px; color: var(--ink-soft); min-height: 1.2em; }
 .alert-fine { font-size: 12px; color: var(--ink-faint); }
+
+.widget-via { margin: 12px 0 8px; font-size: 14px; font-weight: 600; color: var(--ink); }
+.widget-cta { display: block; text-align: center; margin: 8px 0 12px; }
+.widget-mid { font-size: 12px; color: var(--ink-faint); }

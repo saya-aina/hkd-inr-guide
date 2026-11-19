@@ -53,7 +53,9 @@
       <div class="rate-chip" id="widgetRateChip">1 HKD <span class="arrow">→</span> — INR</div>
       <div class="widget-field receive"><div style="flex:1"><label>They receive</label><div class="amount-display" id="widgetReceiveDisplay">—</div></div><span class="currency-chip"><span class="flag">🇮🇳</span> INR</span></div>
     </div>
-    <div class="widget-foot"><a href="remittance.html" style="color: var(--brand-dark); font-weight: 600;">See all 15 providers →</a><span class="best-rate-tag">Mid-market</span></div>
+    <div class="widget-via" id="widgetVia"></div>
+    <a href="remittance.html" id="widgetCta" class="go-btn widget-cta">Compare &amp; send</a>
+    <div class="widget-foot"><span id="widgetMid" class="widget-mid"></span><span class="best-rate-tag" id="widgetTag">Mid-market</span></div>
   </div>
 </section>
 
@@ -194,5 +196,30 @@
 </footer>
 
 <script src="assets/midrate.js"></script>
+<script src="assets/providers.js"></script>
+<script>
+(function () {
+  const hkdEl = document.getElementById("hkd");
+  const fmt = (n, d) => n.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
+  function update() {
+    const mid = window.__midRate, hkd = parseFloat(hkdEl.value) || 0;
+    const cta = document.getElementById("widgetCta");
+    if (cta) cta.href = "remittance.html" + (hkd ? "?amount=" + hkd : "");
+    if (!mid || !hkd) return;
+    const ranked = PROVIDERS.filter(p => p.last_verified && !p.group && (!p.max_single_transfer_hkd || hkd <= p.max_single_transfer_hkd))
+      .map(p => ({ p: p, e: effectiveINR(p, hkd) })).filter(r => r.e).sort((a, b) => b.e.net_inr - a.e.net_inr);
+    if (!ranked.length) return; // keep the mid-market view if nothing checked applies
+    const best = ranked[0];
+    document.getElementById("widgetReceiveDisplay").textContent = fmt(best.e.net_inr, 2);
+    document.getElementById("widgetRateChip").innerHTML = "1 HKD <span class=\"arrow\">→</span> " + fmt(best.e.rate, 4) + " INR";
+    document.getElementById("widgetVia").textContent = "Best checked option today: " + best.p.name + " (fee HK$" + fmt(best.e.flat, 2) + " included)";
+    document.getElementById("widgetMid").textContent = "Mid-market " + fmt(mid, 4) + " · indicative, not a quote";
+    document.getElementById("widgetTag").textContent = "Best checked";
+  }
+  window.__onRateUpdate = update;
+  hkdEl.addEventListener("input", update);
+  loadLiveOverrides().then(update);
+})();
+</script>
 </body>
 </html>
