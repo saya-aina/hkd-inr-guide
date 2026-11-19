@@ -1,0 +1,26 @@
+name: Send daily rate alerts
+
+# 01:30 UTC = 07:00 IST. Best effort: Actions cron can run late.
+on:
+  schedule:
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Print instead of sending (1 = dry run)"
+        default: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/send_alerts.py
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          ALERT_SENDER_EMAIL: ${{ secrets.ALERT_SENDER_EMAIL }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
