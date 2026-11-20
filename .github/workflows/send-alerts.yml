@@ -1,9 +1,11 @@
 name: Send daily rate alerts
+run-name: ${{ github.event.inputs.dry_run == '1' && 'Dry run' || 'Send' }}
 
-# 01:30 UTC = 07:00 IST. Best effort: Actions cron can run late.
+# The Cloudflare Worker (cloudflare/scheduler) triggers this at 01:30 UTC = 07:00 IST.
+# This GitHub schedule is only a FALLBACK at 07:30 UTC; the guard step skips it if a real send already ran.
 on:
   schedule:
-    - cron: "30 1 * * *"
+    - cron: "30 7 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -12,13 +14,25 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   send:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 scripts/send_alerts.py
+      - name: Skip if a real send already ran in the last 10 hours
+        id: guard
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          since=$(date -u -d '10 hours ago' +%Y-%m-%dT%H:%M:%SZ)
+          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f status=success -f "created=>=${since}" -q '[.workflow_runs[]|select(.display_title=="Send")]|length')
+          echo "real sends in last 10h: ${n}"
+          if [ "${n}" -ge 1 ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.guard.outputs.skip != '1'
+        run: python3 scripts/send_alerts.py
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
