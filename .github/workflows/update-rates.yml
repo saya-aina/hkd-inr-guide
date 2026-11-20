@@ -54,3 +54,7 @@ jobs:
           fi
           git commit -m "chore: update rates.json ($(date -u +%Y-%m-%dT%H:%MZ))"
           git push
+
+      - name: Check feed health
+        # Runs after the commit so rates.json still updates. A failure here emails the repo owner.
+        run: python3 scripts/check_rates_health.py
