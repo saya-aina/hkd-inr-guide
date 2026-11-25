@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-24T23:23:58Z",
-  "mid_market_rate": 11.8234,
+  "updated_at": "2026-11-25T07:21:28Z",
+  "mid_market_rate": 11.7856,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
   "providers": [
     {
       "id": "wise",
-      "fee_flat_hkd": 60.64,
+      "fee_flat_hkd": 60.65,
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-24T23:23:57Z"
+      "fetched_at": "2026-11-25T07:21:27Z"
     },
     {
       "id": "instarem",
       "fee_pct": 0.59,
-      "fx_margin_pct": 0.0,
+      "fx_margin_pct": 0.014,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-24T23:23:58Z"
+      "fetched_at": "2026-11-25T07:21:28Z"
     },
     {
       "id": "panda",
