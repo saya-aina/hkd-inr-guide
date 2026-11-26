@@ -20,7 +20,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           since=$(date -u -d '12 hours ago' +%Y-%m-%dT%H:%M:%SZ)
-          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f status=success -f "created=>=${since}" -q '.total_count')
+          # List recent runs and filter in jq: the API's status=success filter
+          # can miss a run that did succeed (it caused a false alarm on 24 Nov).
+          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f per_page=20 -q "[.workflow_runs[] | select(.conclusion == \"success\" and .created_at >= \"${since}\")] | length")
           echo "successful alert runs in the last 12h: ${n}"
           if [ "${n}" -lt 1 ]; then
             echo "::error::Daily rate alert did not run successfully in the last 12 hours."
