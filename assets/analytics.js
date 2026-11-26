@@ -1,7 +1,7 @@
-// Google Analytics 4. Set GA_ID to your measurement ID (looks like G-XXXXXXXXXX).
-// While it is empty, nothing is loaded and no data is sent.
+// Google Analytics 4.
+// Measurement ID for nriremit.com. Clear it to switch analytics off.
 (function () {
-  var GA_ID = "";
+  var GA_ID = "G-SGHMR2TL71";
   if (!GA_ID || /^(localhost|127\.)/.test(location.hostname)) return;
   var s = document.createElement("script");
   s.async = true;
