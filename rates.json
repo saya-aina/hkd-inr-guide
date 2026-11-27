@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T22:00:54Z",
+  "updated_at": "2026-11-27T22:30:33Z",
   "mid_market_rate": 11.869,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
@@ -11,7 +11,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-27T22:00:34Z"
+      "fetched_at": "2026-11-27T22:30:27Z"
     },
     {
       "id": "instarem",
@@ -19,30 +19,30 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-27T22:00:35Z",
+      "fetched_at": "2026-11-27T22:30:28Z",
       "promo_fee_pct": 0.0
     },
     {
       "id": "ofx",
       "fee_flat_hkd": 60.0,
-      "fx_margin_pct": 3.108,
+      "fx_margin_pct": 3.409,
       "points": [
         {
           "amount_hkd": 10000,
           "fee_hkd": 60.0,
-          "fx_margin_pct": 3.108
+          "fx_margin_pct": 3.409
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 0.0,
-          "fx_margin_pct": 2.34
+          "fx_margin_pct": 2.643
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "wise-comparison",
-      "quote_collected_at": "2026-11-27T20:23:52.288427Z",
-      "fetched_at": "2026-11-27T22:00:36Z"
+      "quote_collected_at": "2026-11-27T22:23:50.137556Z",
+      "fetched_at": "2026-11-27T22:30:29Z"
     },
     {
       "id": "wu",
@@ -68,7 +68,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "western-union-catalog",
-      "fetched_at": "2026-11-27T22:00:37Z"
+      "fetched_at": "2026-11-27T22:30:30Z"
     },
     {
       "id": "currencyfair",
@@ -97,17 +97,17 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "currencyfair-comparisonQuotes",
-      "fetched_at": "2026-11-27T22:00:39Z"
+      "fetched_at": "2026-11-27T22:30:32Z"
     },
     {
       "id": "panda",
       "fee_flat_hkd": 30.0,
-      "fx_margin_pct": 0.805,
+      "fx_margin_pct": 0.809,
       "reference_amount_hkd": 10000,
       "source": "api_promo",
       "promo_label": "new_customer_only",
-      "published_at": "2026-11-27T22:04:40Z",
-      "fetched_at": "2026-11-27T22:00:41Z"
+      "published_at": "2026-11-27T22:34:33Z",
+      "fetched_at": "2026-11-27T22:30:33Z"
     },
     {
       "id": "icici",
@@ -130,7 +130,7 @@
     {
       "id": "federalbank",
       "source": "unavailable",
-      "fetched_at": "2026-11-27T22:00:54Z"
+      "fetched_at": "2026-11-27T22:30:33Z"
     },
     {
       "id": "hdfc",
@@ -173,7 +173,7 @@
     {
       "id": "bochk",
       "source": "unavailable",
-      "fetched_at": "2026-11-27T22:00:54Z"
+      "fetched_at": "2026-11-27T22:30:33Z"
     },
     {
       "id": "mg",
