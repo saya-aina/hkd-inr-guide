@@ -102,7 +102,12 @@ function effectiveINR(p, hkdIn) {
   const scaled = !!(p.fee_curve || p.fee_pct != null || p.fee_steps);
   // Amount-based providers use our checked fee/margin model; the hourly feed is a single 10k snapshot and its margin is distorted by a different mid-market source.
   const live = scaled ? {} : (liveOverrides[p.id] || {});
-  const flat = iOk ? +(hkd * iLive.fee_pct / 100).toFixed(2) : (scaled ? feeFor(p, hkd) : (live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd));
+  // Wise: amount-based fee curve, scaled to the live fee fetched at HK$10,000 (kept within 0.5x-2x of the curve as a sanity bound).
+  const wLive = p.id === "wise" ? liveOverrides.wise : null;
+  const wOk = !!(wLive && wLive.source === "api" && wLive.fee_flat_hkd != null && wLive.fetched_at && (Date.now() - new Date(wLive.fetched_at).getTime()) < 36 * 3600 * 1000);
+  let wScale = 1;
+  if (wOk) { const ref = feeFor(p, wLive.reference_amount_hkd || 10000); const r = ref ? wLive.fee_flat_hkd / ref : 1; if (r >= 0.5 && r <= 2) wScale = r; }
+  const flat = iOk ? +(hkd * iLive.fee_pct / 100).toFixed(2) : (scaled ? +(feeFor(p, hkd) * wScale).toFixed(2) : (live.fee_flat_hkd != null ? live.fee_flat_hkd : p.fee_flat_hkd));
   const margin = iOk ? iLive.fx_margin_pct : (p.margin_curve ? marginFor(p, hkd) : (live.fx_margin_pct != null ? live.fx_margin_pct : p.fx_margin_pct));
-  return { net_inr: Math.max(0, hkd - flat) * midRate * (1 - margin / 100), rate: midRate * (1 - margin / 100), flat, margin, live_source: iOk ? "api" : live.source, live_at: iOk ? iLive.fetched_at : null };
+  return { net_inr: Math.max(0, hkd - flat) * midRate * (1 - margin / 100), rate: midRate * (1 - margin / 100), flat, margin, live_source: (iOk || wOk) ? "api" : live.source, live_at: iOk ? iLive.fetched_at : (wOk ? wLive.fetched_at : null) };
 }
