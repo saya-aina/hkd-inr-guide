@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T19:00:34Z",
-  "mid_market_rate": 11.8707,
+  "updated_at": "2026-11-27T19:32:37Z",
+  "mid_market_rate": 11.8703,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
   "providers": [
@@ -11,7 +11,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-27T19:00:09Z"
+      "fetched_at": "2026-11-27T19:32:31Z"
     },
     {
       "id": "instarem",
@@ -19,102 +19,102 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-27T19:00:10Z",
+      "fetched_at": "2026-11-27T19:32:32Z",
       "promo_fee_pct": 0.0
     },
     {
       "id": "ofx",
       "fee_flat_hkd": 60.0,
-      "fx_margin_pct": 3.097,
+      "fx_margin_pct": 3.099,
       "points": [
         {
           "amount_hkd": 10000,
           "fee_hkd": 60.0,
-          "fx_margin_pct": 3.097
+          "fx_margin_pct": 3.099
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 0.0,
-          "fx_margin_pct": 2.329
+          "fx_margin_pct": 2.331
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "wise-comparison",
       "quote_collected_at": "2026-11-27T18:24:09.712897Z",
-      "fetched_at": "2026-11-27T19:00:11Z"
+      "fetched_at": "2026-11-27T19:32:33Z"
     },
     {
       "id": "wu",
       "fee_flat_hkd": 5.0,
-      "fx_margin_pct": 0.442,
+      "fx_margin_pct": 0.438,
       "points": [
         {
           "amount_hkd": 1000,
           "fee_hkd": 5.0,
-          "fx_margin_pct": 0.442
+          "fx_margin_pct": 0.438
         },
         {
           "amount_hkd": 10000,
           "fee_hkd": 5.0,
-          "fx_margin_pct": 0.442
+          "fx_margin_pct": 0.438
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 5.0,
-          "fx_margin_pct": 0.442
+          "fx_margin_pct": 0.438
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "western-union-catalog",
-      "fetched_at": "2026-11-27T19:00:13Z"
+      "fetched_at": "2026-11-27T19:32:35Z"
     },
     {
       "id": "currencyfair",
       "fee_flat_hkd": 10.18,
-      "fx_margin_pct": 0.671,
+      "fx_margin_pct": 0.668,
       "points": [
         {
           "amount_hkd": 1000,
           "fee_hkd": 10.18,
-          "fx_margin_pct": 0.671,
+          "fx_margin_pct": 0.668,
           "fee_inr_flat": 120.0
         },
         {
           "amount_hkd": 10000,
           "fee_hkd": 10.18,
-          "fx_margin_pct": 0.671,
+          "fx_margin_pct": 0.668,
           "fee_inr_flat": 120.0
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 10.18,
-          "fx_margin_pct": 0.671,
+          "fx_margin_pct": 0.668,
           "fee_inr_flat": 120.0
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "currencyfair-comparisonQuotes",
-      "fetched_at": "2026-11-27T19:00:15Z"
+      "fetched_at": "2026-11-27T19:32:36Z"
     },
     {
       "id": "panda",
       "fee_flat_hkd": 30.0,
-      "fx_margin_pct": 0.334,
+      "fx_margin_pct": 0.32,
       "reference_amount_hkd": 10000,
       "source": "api_promo",
       "promo_label": "new_customer_only",
-      "published_at": "2026-11-27T19:04:16Z",
-      "fetched_at": "2026-11-27T19:00:16Z"
+      "published_at": "2026-11-27T19:36:37Z",
+      "fetched_at": "2026-11-27T19:32:37Z"
     },
     {
       "id": "icici",
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.52,
-      "fx_margin_pct": 2.954,
+      "fx_margin_pct": 2.951,
       "published_at": "2026-11-27T09:50:05Z",
       "fetched_at": "2026-11-27T19:00:20Z"
     },
@@ -123,21 +123,21 @@
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.49,
-      "fx_margin_pct": 3.207,
+      "fx_margin_pct": 3.204,
       "published_at": "2026-11-27T13:28:00Z",
       "fetched_at": "2026-11-27T19:00:25Z"
     },
     {
       "id": "federalbank",
       "source": "unavailable",
-      "fetched_at": "2026-11-27T19:00:34Z"
+      "fetched_at": "2026-11-27T19:32:37Z"
     },
     {
       "id": "hdfc",
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.47,
-      "fx_margin_pct": 3.376,
+      "fx_margin_pct": 3.372,
       "published_at": "2026-11-27T04:48:12Z",
       "fetched_at": "2026-11-27T19:00:30Z"
     },
@@ -146,7 +146,7 @@
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.53,
-      "fx_margin_pct": 2.87,
+      "fx_margin_pct": 2.867,
       "published_at": "2026-11-27T19:00:30Z",
       "fetched_at": "2026-11-27T19:00:30Z"
     },
@@ -155,7 +155,7 @@
       "source": "board",
       "kind": "hkab_reference",
       "rate_inr_per_hkd": 10.929,
-      "fx_margin_pct": 7.933,
+      "fx_margin_pct": 7.93,
       "published_at": "2026-11-26T23:25:45Z",
       "fetched_at": "2026-11-27T19:00:33Z",
       "hkab_selling_hkd_per_100_inr": 9.15
@@ -165,7 +165,7 @@
       "source": "board",
       "kind": "hkab_reference",
       "rate_inr_per_hkd": 10.929,
-      "fx_margin_pct": 7.933,
+      "fx_margin_pct": 7.93,
       "published_at": "2026-11-26T23:25:45Z",
       "fetched_at": "2026-11-27T19:00:33Z",
       "hkab_selling_hkd_per_100_inr": 9.15
@@ -173,7 +173,7 @@
     {
       "id": "bochk",
       "source": "unavailable",
-      "fetched_at": "2026-11-27T19:00:34Z"
+      "fetched_at": "2026-11-27T19:32:37Z"
     },
     {
       "id": "mg",
