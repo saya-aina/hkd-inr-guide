@@ -732,3 +732,4 @@ em.slant, .slant { font-style: italic; }
 
 .trust-strip { margin: 18px 0 0; font-size: 13px; color: var(--ink-soft); line-height: 1.6; max-width: 56ch; }
 .trust-strip a { color: var(--brand-dark); font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; }
+.promo-note { display:block; margin-top:6px; padding:6px 10px; border-radius:8px; background:#f1f5f9; color:#334155; font-size:12.5px; line-height:1.4; }
