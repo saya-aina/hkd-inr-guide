@@ -37,6 +37,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Probe RI (temp)
+        continue-on-error: true
+        run: pip install requests && python scripts/probe_ri.py
+
       - name: Install dependencies
         run: pip install --quiet requests pypdf pdfplumber
 
