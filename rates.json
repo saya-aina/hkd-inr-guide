@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-27T21:00:38Z",
-  "mid_market_rate": 11.8754,
+  "updated_at": "2026-11-27T22:00:54Z",
+  "mid_market_rate": 11.869,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
   "providers": [
@@ -11,7 +11,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-27T21:00:31Z"
+      "fetched_at": "2026-11-27T22:00:34Z"
     },
     {
       "id": "instarem",
@@ -19,161 +19,161 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-27T21:00:32Z",
+      "fetched_at": "2026-11-27T22:00:35Z",
       "promo_fee_pct": 0.0
     },
     {
       "id": "ofx",
       "fee_flat_hkd": 60.0,
-      "fx_margin_pct": 3.114,
+      "fx_margin_pct": 3.108,
       "points": [
         {
           "amount_hkd": 10000,
           "fee_hkd": 60.0,
-          "fx_margin_pct": 3.114
+          "fx_margin_pct": 3.108
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 0.0,
-          "fx_margin_pct": 2.347
+          "fx_margin_pct": 2.34
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "wise-comparison",
       "quote_collected_at": "2026-11-27T20:23:52.288427Z",
-      "fetched_at": "2026-11-27T21:00:33Z"
+      "fetched_at": "2026-11-27T22:00:36Z"
     },
     {
       "id": "wu",
       "fee_flat_hkd": 5.0,
-      "fx_margin_pct": 0.481,
+      "fx_margin_pct": 0.428,
       "points": [
         {
           "amount_hkd": 1000,
           "fee_hkd": 5.0,
-          "fx_margin_pct": 0.481
+          "fx_margin_pct": 0.428
         },
         {
           "amount_hkd": 10000,
           "fee_hkd": 5.0,
-          "fx_margin_pct": 0.481
+          "fx_margin_pct": 0.428
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 5.0,
-          "fx_margin_pct": 0.481
+          "fx_margin_pct": 0.428
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "western-union-catalog",
-      "fetched_at": "2026-11-27T21:00:36Z"
+      "fetched_at": "2026-11-27T22:00:37Z"
     },
     {
       "id": "currencyfair",
       "fee_flat_hkd": 10.18,
-      "fx_margin_pct": 0.736,
+      "fx_margin_pct": 0.682,
       "points": [
         {
           "amount_hkd": 1000,
           "fee_hkd": 10.18,
-          "fx_margin_pct": 0.736,
+          "fx_margin_pct": 0.682,
           "fee_inr_flat": 120.0
         },
         {
           "amount_hkd": 10000,
           "fee_hkd": 10.18,
-          "fx_margin_pct": 0.736,
+          "fx_margin_pct": 0.682,
           "fee_inr_flat": 120.0
         },
         {
           "amount_hkd": 50000,
           "fee_hkd": 10.18,
-          "fx_margin_pct": 0.736,
+          "fx_margin_pct": 0.682,
           "fee_inr_flat": 120.0
         }
       ],
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "currencyfair-comparisonQuotes",
-      "fetched_at": "2026-11-27T21:00:37Z"
+      "fetched_at": "2026-11-27T22:00:39Z"
     },
     {
       "id": "panda",
       "fee_flat_hkd": 30.0,
-      "fx_margin_pct": 0.359,
+      "fx_margin_pct": 0.805,
       "reference_amount_hkd": 10000,
       "source": "api_promo",
       "promo_label": "new_customer_only",
-      "published_at": "2026-11-27T21:04:38Z",
-      "fetched_at": "2026-11-27T21:00:38Z"
+      "published_at": "2026-11-27T22:04:40Z",
+      "fetched_at": "2026-11-27T22:00:41Z"
     },
     {
       "id": "icici",
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.52,
-      "fx_margin_pct": 2.993,
+      "fx_margin_pct": 2.94,
       "published_at": "2026-11-27T09:50:05Z",
-      "fetched_at": "2026-11-27T19:00:20Z"
+      "fetched_at": "2026-11-27T22:00:45Z"
     },
     {
       "id": "axisremit",
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.49,
-      "fx_margin_pct": 3.245,
+      "fx_margin_pct": 3.193,
       "published_at": "2026-11-27T13:28:00Z",
       "fetched_at": "2026-11-27T19:00:25Z"
     },
     {
       "id": "federalbank",
       "source": "unavailable",
-      "fetched_at": "2026-11-27T21:00:38Z"
+      "fetched_at": "2026-11-27T22:00:54Z"
     },
     {
       "id": "hdfc",
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.47,
-      "fx_margin_pct": 3.414,
+      "fx_margin_pct": 3.362,
       "published_at": "2026-11-27T04:48:12Z",
-      "fetched_at": "2026-11-27T19:00:30Z"
+      "fetched_at": "2026-11-27T22:00:49Z"
     },
     {
       "id": "kotak",
       "source": "board",
       "kind": "tt_buying",
       "rate_inr_per_hkd": 11.53,
-      "fx_margin_pct": 2.909,
-      "published_at": "2026-11-27T19:00:30Z",
-      "fetched_at": "2026-11-27T19:00:30Z"
+      "fx_margin_pct": 2.856,
+      "published_at": "2026-11-27T22:00:49Z",
+      "fetched_at": "2026-11-27T22:00:49Z"
     },
     {
       "id": "hsbc",
       "source": "board",
       "kind": "hkab_reference",
-      "rate_inr_per_hkd": 10.929,
-      "fx_margin_pct": 7.969,
-      "published_at": "2026-11-26T23:25:45Z",
-      "fetched_at": "2026-11-27T19:00:33Z",
-      "hkab_selling_hkd_per_100_inr": 9.15
+      "rate_inr_per_hkd": 10.989,
+      "fx_margin_pct": 7.414,
+      "published_at": "2026-11-27T21:04:45Z",
+      "fetched_at": "2026-11-27T22:00:52Z",
+      "hkab_selling_hkd_per_100_inr": 9.1
     },
     {
       "id": "dbs",
       "source": "board",
       "kind": "hkab_reference",
-      "rate_inr_per_hkd": 10.929,
-      "fx_margin_pct": 7.969,
-      "published_at": "2026-11-26T23:25:45Z",
-      "fetched_at": "2026-11-27T19:00:33Z",
-      "hkab_selling_hkd_per_100_inr": 9.15
+      "rate_inr_per_hkd": 10.989,
+      "fx_margin_pct": 7.414,
+      "published_at": "2026-11-27T21:04:45Z",
+      "fetched_at": "2026-11-27T22:00:52Z",
+      "hkab_selling_hkd_per_100_inr": 9.1
     },
     {
       "id": "bochk",
       "source": "unavailable",
-      "fetched_at": "2026-11-27T21:00:38Z"
+      "fetched_at": "2026-11-27T22:00:54Z"
     },
     {
       "id": "mg",
