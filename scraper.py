@@ -191,13 +191,24 @@ def fetch_instarem_quote(mid: float) -> dict[str, Any] | None:
         if not (0 <= fee_pct <= 3) or not (-0.5 <= margin <= 3):
             print(f"[instarem] implausible fee {fee_pct}% or margin {margin:.2f}%", file=sys.stderr)
             return None
-        return {
+        out = {
             "fee_pct": round(fee_pct, 3),
             "fx_margin_pct": round(max(margin, 0.0), 3),
             "reference_amount_hkd": AMOUNT_HKD,
             "source": "api",
             "fetched_at": iso_now(),
         }
+        # First-transfer offer: shown beside the regular price, never as the ranked figure
+        # (agreed with Instarem, 24-25 Nov 2026).
+        promo = cfg.get("total_fee_percent")
+        print(f"[instarem] regular fee {fee_pct}% / current total_fee_percent {promo}", file=sys.stderr)
+        try:
+            promo = float(promo) if promo is not None else None
+        except (TypeError, ValueError):
+            promo = None
+        if promo is not None and 0 <= promo < fee_pct - 0.001:
+            out["promo_fee_pct"] = round(promo, 3)
+        return out
     except Exception as e:
         print(f"[instarem] failed: {e}", file=sys.stderr)
         return None
