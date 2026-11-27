@@ -729,3 +729,6 @@ em.slant, .slant { font-style: italic; }
 .widget-via { margin: 12px 0 8px; font-size: 14px; font-weight: 600; color: var(--ink); }
 .widget-cta { display: block; text-align: center; margin: 8px 0 12px; }
 .widget-mid { font-size: 12px; color: var(--ink-faint); }
+
+.trust-strip { margin: 18px 0 0; font-size: 13px; color: var(--ink-soft); line-height: 1.6; max-width: 56ch; }
+.trust-strip a { color: var(--brand-dark); font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; }
