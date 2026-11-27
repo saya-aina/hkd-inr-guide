@@ -1,10 +1,10 @@
 name: Alerts watchdog
 
-# 04:30 UTC = 10:00 IST. Fails (and so emails the repo owner) if the daily
+# 12:00 UTC = 17:30 IST. Fails (and so emails the repo owner) if the daily
 # alert workflow has not completed successfully in the last 12 hours.
 on:
   schedule:
-    - cron: "30 4 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 permissions:
@@ -20,9 +20,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           since=$(date -u -d '12 hours ago' +%Y-%m-%dT%H:%M:%SZ)
-          # List recent runs and filter in jq: the API's status=success filter
-          # can miss a run that did succeed (it caused a false alarm on 24 Nov).
-          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f per_page=20 -q "[.workflow_runs[] | select(.conclusion == \"success\" and .created_at >= \"${since}\")] | length")
+          # Filter in jq: the API's status=success filter missed a real success on 24 Nov.
+          # Count only real sends (run title "Send"), not dry runs.
+          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f per_page=30 -q "[.workflow_runs[] | select(.conclusion == \"success\" and .display_title == \"Send\" and .created_at >= \"${since}\")] | length")
           echo "successful alert runs in the last 12h: ${n}"
           if [ "${n}" -lt 1 ]; then
             echo "::error::Daily rate alert did not run successfully in the last 12 hours."
