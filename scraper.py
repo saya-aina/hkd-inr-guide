@@ -203,14 +203,149 @@ def fetch_instarem_quote(mid: float) -> dict[str, Any] | None:
         return None
 
 
+
+# ---------------------------------------------------------------------------
+# Other providers via the same public Wise comparison endpoint
+# ---------------------------------------------------------------------------
+
+COMPARE_AMOUNTS = (1_000, 10_000, 50_000)
+
+# site provider id -> aliases the comparison endpoint uses. For HKD to INR the
+# endpoint lists only Wise, Instarem and OFX (checked 27 Nov 2026).
+COMPARE_ALIASES = {
+    "ofx": ("ofx",),
+}
+
+
+def _fetch_comparison(amount: int) -> list[dict[str, Any]] | None:
+    try:
+        r = requests.get(
+            "https://api.wise.com/v4/comparisons/",
+            params={"sourceCurrency": "HKD", "targetCurrency": "INR", "sendAmount": amount},
+            timeout=TIMEOUT, headers=UA,
+        )
+        r.raise_for_status()
+        data = r.json()
+        return data.get("providers") or data.get("comparisons") or []
+    except Exception as e:
+        print(f"[compare] {amount} failed: {e}", file=sys.stderr)
+        return None
+
+
+def fetch_comparison_providers() -> dict[str, dict[str, Any]]:
+    """
+    For each provider in COMPARE_ALIASES, build fee/margin points at three
+    amounts from Wise's public comparison data. Margin is measured against the
+    Wise row in the same response, so both sides share one mid-market source.
+    A provider is only returned when every point passes sanity checks.
+    """
+    per_amount: dict[int, list[dict[str, Any]]] = {}
+    for amt in COMPARE_AMOUNTS:
+        rows = _fetch_comparison(amt)
+        if rows is None:
+            continue
+        per_amount[amt] = rows
+        print(f"[compare] {amt}: aliases = {sorted((p.get('alias') or p.get('name') or '?') for p in rows)}", file=sys.stderr)
+
+    out: dict[str, dict[str, Any]] = {}
+    for pid, aliases in COMPARE_ALIASES.items():
+        points, collected = [], []
+        for amt in COMPARE_AMOUNTS:
+            rows = per_amount.get(amt)
+            if not rows:
+                continue
+            wise = next((p for p in rows if (p.get("alias") or "").lower() == "wise"), None)
+            row = next((p for p in rows if (p.get("alias") or p.get("name") or "").lower().replace(" ", "-") in aliases), None)
+            if not wise or not row:
+                continue  # provider not quoted at this amount (e.g. below its minimum)
+            wq = (wise.get("quotes") or [wise])[0]
+            quotes = row.get("quotes") or []
+            q = quotes[0] if quotes else None
+            if not q or q.get("rate") is None or q.get("fee") is None or not wq.get("rate"):
+                continue
+            rate, fee, mid = float(q["rate"]), float(q["fee"]), float(wq["rate"])
+            margin = (1 - rate / mid) * 100
+            if not (0 <= fee <= amt * 0.1) or not (-0.5 <= margin <= 6):
+                print(f"[compare] {pid} @ {amt}: implausible fee {fee} / margin {margin:.2f}%", file=sys.stderr)
+                continue
+            points.append({"amount_hkd": amt, "fee_hkd": round(fee, 2), "fx_margin_pct": round(max(margin, 0.0), 3)})
+            if q.get("dateCollected"):
+                collected.append(q["dateCollected"])
+        ref = next((p for p in points if p["amount_hkd"] == AMOUNT_HKD), None)
+        if ref:
+            out[pid] = {
+                "fee_flat_hkd": ref["fee_hkd"],
+                "fx_margin_pct": ref["fx_margin_pct"],
+                "points": points,
+                "reference_amount_hkd": AMOUNT_HKD,
+                "source": "api",
+                "via": "wise-comparison",
+                "quote_collected_at": min(collected) if collected else None,
+                "fetched_at": iso_now(),
+            }
+        else:
+            print(f"[compare] {pid}: not live this run", file=sys.stderr)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Western Union public price catalog (the call its own price estimator makes)
+# ---------------------------------------------------------------------------
+
+WU_URL = "https://www.westernunion.com/wuconnect/prices/catalog"
+
+
+def _wu_body(amount: int) -> dict[str, Any]:
+    return {
+        "header_request": {"version": "0.5", "request_type": "PRICECATALOG"},
+        "sender": {"client": "WUCOM", "channel": "WWEB", "funds_in": "*",
+                   "curr_iso3": "HKD", "cty_iso2_ext": "HK", "send_amount": amount},
+        "receiver": {"curr_iso3": "INR", "cty_iso2_ext": "IN", "cty_iso2": "IN"},
+    }
+
+
+def fetch_wu_quote(mid: float) -> dict[str, Any] | None:
+    """
+    Bank-account funded (fund_in TG) transfer paid out Direct to Bank
+    (service 500), at three amounts. Fee = gross_fee; margin is measured
+    against the mid-market rate used for the whole run.
+    """
+    try:
+        points = []
+        for amt in COMPARE_AMOUNTS:
+            r = requests.post(WU_URL, json=_wu_body(amt), timeout=TIMEOUT,
+                              headers={**UA, "Accept": "application/json"})
+            r.raise_for_status()
+            d = r.json()
+            grp = next((g for g in d.get("services_groups", []) if g.get("service") == "500"), None)
+            row = next((p for p in (grp or {}).get("pay_groups", []) if p.get("fund_in") == "TG"), None)
+            if not row:
+                print(f"[wu] no bank-funded Direct to Bank row at {amt}", file=sys.stderr)
+                return None
+            fee, fx = float(row["gross_fee"]), float(row["fx_rate"])
+            margin = (1 - fx / mid) * 100
+            if not (0 <= fee <= amt * 0.1) or not (-0.5 <= margin <= 6):
+                print(f"[wu] implausible fee {fee} / margin {margin:.2f}% at {amt}", file=sys.stderr)
+                return None
+            points.append({"amount_hkd": amt, "fee_hkd": round(fee, 2), "fx_margin_pct": round(max(margin, 0.0), 3)})
+        ref = next(p for p in points if p["amount_hkd"] == AMOUNT_HKD)
+        return {
+            "fee_flat_hkd": ref["fee_hkd"], "fx_margin_pct": ref["fx_margin_pct"],
+            "points": points, "reference_amount_hkd": AMOUNT_HKD,
+            "source": "api", "via": "western-union-catalog", "fetched_at": iso_now(),
+        }
+    except Exception as e:
+        print(f"[wu] failed: {e}", file=sys.stderr)
+        return None
+
 # ---------------------------------------------------------------------------
 # Curated-only providers
 # ---------------------------------------------------------------------------
 
 CURATED_ONLY = [
-    "panda", "remitly", "orbitremit", "xe",
-    "wu", "mg", "hsbc", "dbs", "bochk",
-]
+    "panda", "mg", "currencyfair", "axisremit", "hdfc", "kotak",
+    "icici", "federalbank", "hsbc", "dbs", "bochk",
+]  # must match PROVIDERS in assets/providers.js (15 in total with the four live ones)
 
 
 # ---------------------------------------------------------------------------
@@ -256,8 +391,35 @@ def main() -> int:
         else {"id": "instarem", "source": "unavailable", "fetched_at": iso_now()}
     )
 
+    live_more = fetch_comparison_providers()
+    for pid in COMPARE_ALIASES:
+        providers.append(
+            {"id": pid, **live_more[pid]} if pid in live_more
+            else {"id": pid, "source": "unavailable", "fetched_at": iso_now()}
+        )
+
+    wu = fetch_wu_quote(mid)
+    providers.append(
+        {"id": "wu", **wu} if wu
+        else {"id": "wu", "source": "unavailable", "fetched_at": iso_now()}
+    )
+    live_more = {**live_more, **({"wu": wu} if wu else {})}
+
     for pid in CURATED_ONLY:
         providers.append({"id": pid, "source": "curated"})
+
+    # Carry the last good live quote forward when a fetch fails this run, so a
+    # single hiccup doesn't drop a provider. Its old fetched_at is kept, so the
+    # site's 36-hour freshness window and the health check still see its age.
+    try:
+        prev = {p["id"]: p for p in json.loads(OUT_PATH.read_text(encoding="utf-8")).get("providers", [])}
+    except Exception:
+        prev = {}
+    for i, p in enumerate(providers):
+        old = prev.get(p["id"])
+        if p.get("source") == "unavailable" and old and old.get("source") == "api" and old.get("fetched_at"):
+            print(f"[carry] {p['id']}: keeping previous live quote from {old['fetched_at']}", file=sys.stderr)
+            providers[i] = old
 
     payload = {
         "schema_version": 1,
@@ -275,7 +437,7 @@ def main() -> int:
     }
 
     OUT_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {OUT_PATH} - mid={mid:.4f} - wise={'ok' if wise else 'failed'} - instarem={'ok' if inst else 'failed'}")
+    print(f"Wrote {OUT_PATH} - mid={mid:.4f} - wise={'ok' if wise else 'failed'} - instarem={'ok' if inst else 'failed'} - more={sorted(live_more)}")
     return 0
 
 

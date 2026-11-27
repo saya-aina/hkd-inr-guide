@@ -49,10 +49,30 @@ async function loadLiveOverrides() {
     if (data && data.providers) liveOverrides = Object.fromEntries(data.providers.map(p => [p.id, p]));
   } catch (_) {}
 }
+// Providers whose live feed carries fee/margin points at several amounts (OFX, Western Union): interpolate between them.
+function liveFromPoints(id, hkd) {
+  const o = liveOverrides[id];
+  if (!o || o.source !== "api" || !Array.isArray(o.points) || !o.points.length || !o.fetched_at) return null;
+  if (Date.now() - new Date(o.fetched_at).getTime() > 36 * 3600 * 1000) return null;
+  const pts = o.points.slice().sort((a, b) => a.amount_hkd - b.amount_hkd);
+  const lerp = (k) => {
+    if (hkd <= pts[0].amount_hkd) return pts[0][k];
+    for (let i = 1; i < pts.length; i++) {
+      if (hkd <= pts[i].amount_hkd) { const a = pts[i - 1], b = pts[i], t = (hkd - a.amount_hkd) / (b.amount_hkd - a.amount_hkd); return a[k] + (b[k] - a[k]) * t; }
+    }
+    return pts[pts.length - 1][k];
+  };
+  // Fees step with the amount (e.g. OFX waives its fee from HK$50,000), so take the nearest point at or below; margin is interpolated.
+  let fee = pts[0].fee_hkd;
+  for (const q of pts) if (hkd >= q.amount_hkd) fee = q.fee_hkd;
+  return { flat: +fee.toFixed(2), margin: lerp("fx_margin_pct"), at: o.fetched_at };
+}
 function effectiveINR(p, hkdIn) {
   const hkd = hkdIn != null ? hkdIn : (parseFloat(document.getElementById("hkd").value) || 0);
   const midRate = window.__midRate;
   if (!midRate || !hkd) return null;
+  const pts = liveFromPoints(p.id, hkd);
+  if (pts) return { net_inr: Math.max(0, hkd - pts.flat) * midRate * (1 - pts.margin / 100), rate: midRate * (1 - pts.margin / 100), flat: pts.flat, margin: pts.margin, live_source: "api", live_at: pts.at };
   const iLive = p.id === "instarem" ? liveOverrides.instarem : null;
   const iOk = !!(iLive && iLive.source === "api" && iLive.fee_pct != null && iLive.fetched_at && (Date.now() - new Date(iLive.fetched_at).getTime()) < 36 * 3600 * 1000);
   const scaled = !!(p.fee_curve || p.fee_pct != null || p.fee_steps);
