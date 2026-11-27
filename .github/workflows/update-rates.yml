@@ -39,7 +39,7 @@ jobs:
 
       - name: Probe RI (temp)
         continue-on-error: true
-        run: pip install requests && python scripts/probe_ri.py
+        run: pip install requests playwright && python -m playwright install --with-deps chromium >/dev/null 2>&1; python scripts/probe_ri.py
 
       - name: Install dependencies
         run: pip install --quiet requests pypdf pdfplumber
