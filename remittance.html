@@ -116,6 +116,7 @@
     </div>
     <p class="pay-note"><strong>Bank transfer / FPS prices.</strong> Paying by debit or credit card is usually much dearer (Wise was about 4.8% at HK$10,000 on 7 Nov, against about 0.6% by bank transfer). New-customer offers are not used for ranking.</p>
     <div id="snapshot" class="snapshot"></div>
+    <p class="status-legend"><span class="status-pill live">Live</span> rate pulled from the provider's API. <span class="status-pill checked">Checked DATE</span> fee and rate verified by hand. <span class="status-pill indicative">Indicative</span> ballpark only — do not use for a quote.</p>
     <div id="providers" class="providers"></div>
   </div>
   <aside class="side">
@@ -234,6 +235,11 @@ function render() {
   const card = (p, idx) => {
     const eff = effectiveINR(p);
     const isLive = eff && eff.live_source === "api";
+    const statusPill = isLive
+      ? '<span class="status-pill live" title="Rate and fee fetched from the provider API.">Live</span>'
+      : (p.last_verified
+        ? '<span class="status-pill checked" title="Rate and fee checked manually on ' + p.last_verified + '.">Checked ' + p.last_verified + '</span>'
+        : '<span class="status-pill indicative" title="Indicative figure \u2014 not a quote.">Indicative</span>');
     const isBest = bestP && p.id === bestP.id && sortEl.value === "rate";
     const miniBadges = [
       p.iam_smart ? badge("iAM Smart", "") : null,
@@ -247,7 +253,7 @@ function render() {
     const ctaBlock = p.affiliate_url ? '<a class="go-btn" href="' + p.affiliate_url + '" rel="nofollow sponsored noopener" target="_blank">Send money now <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></a>' + (p.aff ? '<span class="aff-note">Affiliate link</span>' : '') + (p.cta_note ? '<span class="aff-note">' + p.cta_note + '</span>' : '') : '<span class="go-btn ghost">Existing customers only</span>';
     const verifiedText = p.last_verified === null ? 'Needs verification' : 'Last verified ' + p.last_verified;
     const footBlock = isLive ? '<span class="live-marker">Live rate · fetched ' + (eff.live_at ? new Date(eff.live_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "hourly") + '</span><span class="show-methods">Fee method checked ' + p.last_verified + '</span>' : '<span class="indic">' + (p.last_verified ? 'Checked manually' : 'Indicative · not ranked') + '</span><span class="show-methods">' + verifiedText + '</span>';
-    return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div>' + (p.fee_note ? '<p class="prov-note">' + p.fee_note + '</p>' : '') + '</article>';
+    return '<article class="provider-card' + (isBest ? ' best' : '') + '" data-id="' + p.id + '">' + (isBest ? '<span class="best-badge">BEST VALUE</span>' : '') + '<div class="provider-row"><div class="provider-identity"><div class="avatar">' + p.avatar + '</div><div><p class="pname">' + p.name + ' ' + statusPill + '</p><p class="prating">' + p.host + '</p></div></div><div><div class="col-label">Rate</div><div class="col-value rate">' + (eff ? fmtRate(eff.rate) : '—') + '</div></div><div><div class="col-label">Fee</div>' + feeDisplay + '</div><div><div class="col-label">Speed</div><div class="col-value"><span class="ic">◷</span>' + p.delivery_label + '</div></div><div><div class="col-label">Recipient Gets</div><div class="col-value get">' + (eff ? fmtINR(eff.net_inr) : '—') + '</div></div><div>' + ctaBlock + '</div></div><div class="badges-row">' + miniBadges + '</div><div class="provider-foot">' + footBlock + '</div>' + (p.fee_note ? '<p class="prov-note">' + p.fee_note + '</p>' : '') + '</article>';
   };
   const mainList = list.filter(p => !p.group), bankList = list.filter(p => p.group);
   listEl.innerHTML = mainList.map(card).join("") + (bankList.length ? '<details class="bank-group"><summary>Bank NRI services for account holders (' + bankList.length + ') · indicative, not verified</summary>' + bankList.map(card).join("") + '</details>' : "");

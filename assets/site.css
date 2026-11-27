@@ -344,6 +344,13 @@ section { margin-bottom: 72px; }
 .provider-card { background: var(--surface); border-radius: var(--radius); padding: 22px; box-shadow: 0 2px 12px rgba(15,30,80,0.05); transition: box-shadow .15s; position: relative; }
 .provider-card:hover { box-shadow: 0 6px 24px rgba(15,30,80,0.08); }
 .provider-card.best { border: 2px solid var(--brand); padding: 20px; }
+.status-legend { font-size: 13px; color: var(--ink-soft); margin: 0 0 16px; line-height: 1.8; }
+/* Provider status pills — visible at the top of each card */
+.status-pill { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-pill); margin-left: 6px; vertical-align: middle; white-space: nowrap; }
+.status-pill.live { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.status-pill.checked { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-transform: none; letter-spacing: 0.01em; font-weight: 600; }
+.status-pill.indicative { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
 .best-badge {
   position: absolute; top: -11px; left: 20px;
   background: var(--brand); color: #fff;
