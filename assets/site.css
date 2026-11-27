@@ -350,6 +350,7 @@ section { margin-bottom: 72px; }
 .status-pill.live { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
 .status-pill.checked { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-transform: none; letter-spacing: 0.01em; font-weight: 600; }
 .status-pill.indicative { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.status-pill.promo { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
 
 .best-badge {
   position: absolute; top: -11px; left: 20px;
@@ -733,3 +734,4 @@ em.slant, .slant { font-style: italic; }
 .trust-strip { margin: 18px 0 0; font-size: 13px; color: var(--ink-soft); line-height: 1.6; max-width: 56ch; }
 .trust-strip a { color: var(--brand-dark); font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; }
 .promo-note { display:block; margin-top:6px; padding:6px 10px; border-radius:8px; background:#f1f5f9; color:#334155; font-size:12.5px; line-height:1.4; }
+.promo-note.warn { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }

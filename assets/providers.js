@@ -67,10 +67,34 @@ function liveFromPoints(id, hkd) {
   for (const q of pts) if (hkd >= q.amount_hkd) fee = q.fee_hkd;
   return { flat: +fee.toFixed(2), margin: lerp("fx_margin_pct"), at: o.fetched_at };
 }
+// Bank board rates (ICICI, Axis, Federal, and HKAB-based HSBC / DBS): a daily published rate, not a quote.
+function liveFromBoard(p) {
+  const o = liveOverrides[p.id];
+  if (!o || o.source !== "board" || o.fx_margin_pct == null || !o.published_at) return null;
+  if (Date.now() - new Date(o.published_at).getTime() > 7 * 24 * 3600 * 1000) return null;
+  const when = new Date(o.published_at).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: o.kind === "hkab_reference" ? "Asia/Hong_Kong" : "Asia/Kolkata" }) + (o.kind === "hkab_reference" ? " HKT" : " IST");
+  const m = o.fx_margin_pct.toFixed(1);
+  const note = o.kind === "hkab_reference"
+    ? "Ballpark only, not a quote. Estimated from the Hong Kong Association of Banks reference selling rate for INR (HK$" + o.hkab_selling_hkd_per_100_inr.toFixed(2) + " per 100 INR, " + when + "); " + p.name.replace(/ \(.*\)$/, "") + "'s own board rates are expected to sit close to it. Roughly " + m + "% below mid-market. Check with your bank."
+    : "Indicative, based on the bank's published TT buying rate for inward remittance (" + o.rate_inr_per_hkd.toFixed(2) + " INR per HKD, published " + when + "), about " + m + "% below mid-market. It is a board rate, not a quote; account holders may get better. Check with your bank.";
+  return { margin: o.fx_margin_pct, note: note, at: o.published_at };
+}
+// Panda Remit - live promo rate (new customers only). Shown but not crowned.
+function livePandaPromo(p) {
+  if (p.id !== "panda") return null;
+  const o = liveOverrides.panda;
+  if (!o || o.source !== "api_promo" || o.fx_margin_pct == null || !o.fetched_at) return null;
+  if (Date.now() - new Date(o.fetched_at).getTime() > 36 * 3600 * 1000) return null;
+  return { flat: o.fee_flat_hkd, margin: o.fx_margin_pct, at: o.fetched_at, published_at: o.published_at };
+}
 function effectiveINR(p, hkdIn) {
   const hkd = hkdIn != null ? hkdIn : (parseFloat(document.getElementById("hkd").value) || 0);
   const midRate = window.__midRate;
   if (!midRate || !hkd) return null;
+  const pp = livePandaPromo(p);
+  if (pp) { return { net_inr: Math.max(0, hkd - pp.flat) * midRate * (1 - pp.margin / 100), rate: midRate * (1 - pp.margin / 100), flat: pp.flat, margin: pp.margin, live_source: "api_promo", live_at: pp.at, live_published: pp.published_at }; }
+  const bd = liveFromBoard(p);
+  if (bd) { const f = p.fee_flat_hkd || 0; return { net_inr: Math.max(0, hkd - f) * midRate * (1 - bd.margin / 100), rate: midRate * (1 - bd.margin / 100), flat: f, margin: bd.margin, live_source: "board", live_at: null }; }
   const pts = liveFromPoints(p.id, hkd);
   if (pts) return { net_inr: Math.max(0, hkd - pts.flat) * midRate * (1 - pts.margin / 100), rate: midRate * (1 - pts.margin / 100), flat: pts.flat, margin: pts.margin, live_source: "api", live_at: pts.at };
   const iLive = p.id === "instarem" ? liveOverrides.instarem : null;
