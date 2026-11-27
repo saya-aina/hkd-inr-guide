@@ -37,6 +37,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Probe MG (temp)
+        continue-on-error: true
+        run: pip install requests playwright && python -m playwright install --with-deps chromium >/dev/null 2>&1; python scripts/probe_mg.py
+
       - name: Install dependencies
         run: pip install --quiet requests pypdf pdfplumber
 
