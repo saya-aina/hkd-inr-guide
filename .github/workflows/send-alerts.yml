@@ -28,7 +28,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           since=$(date -u -d '10 hours ago' +%Y-%m-%dT%H:%M:%SZ)
-          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f status=success -f "created=>=${since}" -q '[.workflow_runs[]|select(.display_title=="Send")]|length')
+          # Filter in jq: the API's status=success filter can miss real successes.
+          n=$(gh api -X GET "repos/${{ github.repository }}/actions/workflows/send-alerts.yml/runs" -f per_page=30 -q "[.workflow_runs[] | select(.conclusion == \"success\" and .display_title == \"Send\" and .created_at >= \"${since}\")] | length")
           echo "real sends in last 10h: ${n}"
           if [ "${n}" -ge 1 ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; fi
       - if: steps.guard.outputs.skip != '1'
