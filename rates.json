@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-28T08:00:53Z",
+  "updated_at": "2026-11-28T09:00:37Z",
   "mid_market_rate": 11.869,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
@@ -11,7 +11,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-28T08:00:36Z"
+      "fetched_at": "2026-11-28T09:00:31Z"
     },
     {
       "id": "instarem",
@@ -19,7 +19,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-28T08:00:37Z",
+      "fetched_at": "2026-11-28T09:00:32Z",
       "promo_fee_pct": 0.0
     },
     {
@@ -41,8 +41,8 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "wise-comparison",
-      "quote_collected_at": "2026-11-28T06:24:36.076893Z",
-      "fetched_at": "2026-11-28T08:00:38Z"
+      "quote_collected_at": "2026-11-28T08:26:49.801884Z",
+      "fetched_at": "2026-11-28T09:00:33Z"
     },
     {
       "id": "wu",
@@ -68,7 +68,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "western-union-catalog",
-      "fetched_at": "2026-11-28T08:00:39Z"
+      "fetched_at": "2026-11-28T09:00:34Z"
     },
     {
       "id": "currencyfair",
@@ -97,7 +97,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "currencyfair-comparisonQuotes",
-      "fetched_at": "2026-11-28T08:00:41Z"
+      "fetched_at": "2026-11-28T09:00:36Z"
     },
     {
       "id": "panda",
@@ -106,8 +106,8 @@
       "reference_amount_hkd": 10000,
       "source": "api_promo",
       "promo_label": "new_customer_only",
-      "published_at": "2026-11-28T08:04:42Z",
-      "fetched_at": "2026-11-28T08:00:42Z"
+      "published_at": "2026-11-28T09:04:37Z",
+      "fetched_at": "2026-11-28T09:00:37Z"
     },
     {
       "id": "icici",
@@ -177,7 +177,7 @@
     {
       "id": "bochk",
       "source": "unavailable",
-      "fetched_at": "2026-11-28T08:00:53Z"
+      "fetched_at": "2026-11-28T09:00:37Z"
     },
     {
       "id": "mg",
