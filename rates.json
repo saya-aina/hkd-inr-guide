@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-28T07:00:38Z",
+  "updated_at": "2026-11-28T08:00:53Z",
   "mid_market_rate": 11.869,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
@@ -11,7 +11,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-28T07:00:32Z"
+      "fetched_at": "2026-11-28T08:00:36Z"
     },
     {
       "id": "instarem",
@@ -19,7 +19,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-28T07:00:33Z",
+      "fetched_at": "2026-11-28T08:00:37Z",
       "promo_fee_pct": 0.0
     },
     {
@@ -42,7 +42,7 @@
       "source": "api",
       "via": "wise-comparison",
       "quote_collected_at": "2026-11-28T06:24:36.076893Z",
-      "fetched_at": "2026-11-28T07:00:34Z"
+      "fetched_at": "2026-11-28T08:00:38Z"
     },
     {
       "id": "wu",
@@ -68,7 +68,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "western-union-catalog",
-      "fetched_at": "2026-11-28T07:00:35Z"
+      "fetched_at": "2026-11-28T08:00:39Z"
     },
     {
       "id": "currencyfair",
@@ -97,7 +97,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "currencyfair-comparisonQuotes",
-      "fetched_at": "2026-11-28T07:00:37Z"
+      "fetched_at": "2026-11-28T08:00:41Z"
     },
     {
       "id": "panda",
@@ -106,8 +106,8 @@
       "reference_amount_hkd": 10000,
       "source": "api_promo",
       "promo_label": "new_customer_only",
-      "published_at": "2026-11-28T07:04:38Z",
-      "fetched_at": "2026-11-28T07:00:38Z"
+      "published_at": "2026-11-28T08:04:42Z",
+      "fetched_at": "2026-11-28T08:00:42Z"
     },
     {
       "id": "icici",
@@ -125,12 +125,16 @@
       "rate_inr_per_hkd": 11.49,
       "fx_margin_pct": 3.193,
       "published_at": "2026-11-27T13:28:00Z",
-      "fetched_at": "2026-11-28T01:00:44Z"
+      "fetched_at": "2026-11-28T08:00:46Z"
     },
     {
       "id": "federalbank",
-      "source": "unavailable",
-      "fetched_at": "2026-11-28T07:00:38Z"
+      "source": "board",
+      "kind": "tt_buying",
+      "rate_inr_per_hkd": 11.59,
+      "fx_margin_pct": 2.351,
+      "published_at": "2026-11-27T03:33:21Z",
+      "fetched_at": "2026-11-28T08:00:51Z"
     },
     {
       "id": "hdfc",
@@ -173,7 +177,7 @@
     {
       "id": "bochk",
       "source": "unavailable",
-      "fetched_at": "2026-11-28T07:00:38Z"
+      "fetched_at": "2026-11-28T08:00:53Z"
     },
     {
       "id": "mg",
