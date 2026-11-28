@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-28T06:00:52Z",
+  "updated_at": "2026-11-28T07:00:38Z",
   "mid_market_rate": 11.869,
   "mid_source": "wise",
   "reference_amount_hkd": 10000,
@@ -11,7 +11,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-28T06:00:33Z"
+      "fetched_at": "2026-11-28T07:00:32Z"
     },
     {
       "id": "instarem",
@@ -19,7 +19,7 @@
       "fx_margin_pct": 0.0,
       "reference_amount_hkd": 10000,
       "source": "api",
-      "fetched_at": "2026-11-28T06:00:34Z",
+      "fetched_at": "2026-11-28T07:00:33Z",
       "promo_fee_pct": 0.0
     },
     {
@@ -41,8 +41,8 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "wise-comparison",
-      "quote_collected_at": "2026-11-28T04:24:40.448227Z",
-      "fetched_at": "2026-11-28T06:00:35Z"
+      "quote_collected_at": "2026-11-28T06:24:36.076893Z",
+      "fetched_at": "2026-11-28T07:00:34Z"
     },
     {
       "id": "wu",
@@ -68,7 +68,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "western-union-catalog",
-      "fetched_at": "2026-11-28T06:00:36Z"
+      "fetched_at": "2026-11-28T07:00:35Z"
     },
     {
       "id": "currencyfair",
@@ -97,7 +97,7 @@
       "reference_amount_hkd": 10000,
       "source": "api",
       "via": "currencyfair-comparisonQuotes",
-      "fetched_at": "2026-11-28T06:00:37Z"
+      "fetched_at": "2026-11-28T07:00:37Z"
     },
     {
       "id": "panda",
@@ -106,8 +106,8 @@
       "reference_amount_hkd": 10000,
       "source": "api_promo",
       "promo_label": "new_customer_only",
-      "published_at": "2026-11-28T06:04:38Z",
-      "fetched_at": "2026-11-28T06:00:38Z"
+      "published_at": "2026-11-28T07:04:38Z",
+      "fetched_at": "2026-11-28T07:00:38Z"
     },
     {
       "id": "icici",
@@ -130,7 +130,7 @@
     {
       "id": "federalbank",
       "source": "unavailable",
-      "fetched_at": "2026-11-28T06:00:52Z"
+      "fetched_at": "2026-11-28T07:00:38Z"
     },
     {
       "id": "hdfc",
@@ -173,7 +173,7 @@
     {
       "id": "bochk",
       "source": "unavailable",
-      "fetched_at": "2026-11-28T06:00:52Z"
+      "fetched_at": "2026-11-28T07:00:38Z"
     },
     {
       "id": "mg",
